@@ -1,0 +1,53 @@
+<apex:page controller="QuestionController" sidebar="false" showheader="false"  >
+
+
+  	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"/> 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"/>
+    <apex:stylesheet value="{!URLFOR($Resource.bootstrap, 'css/bootstrap.min.css')}"/>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"/> 
+    
+    
+<div class="enact">
+
+ <apex:form id="formId">
+		 <br/>
+         <br/>
+         
+      
+       	<div class="row">
+          
+          <div class="page header" style="background-color:bisque;" align="center" > <font size="5"> {!papername} </font></div>
+             
+         </div>
+         <br/>
+
+  <div class="container" style="width: 20%; margin-top: 15%;">
+
+    <div class="panel panel-info" >
+                .
+              <Font size="3"> Do You Want to Submit Your Paper ? </Font>
+              
+     <div class="panel-body"> 
+     
+      <div class="row">
+      
+       <div class="col-sm-3"></div>
+       <div class="col-sm-3">
+                        <apex:commandButton styleclass="btn btn-danger" title="Click Here To Finish Exam." value="Ok" action="{!submitbtn2}" />
+                      </div>
+                      <div class="col-sm-3"> 
+                        <apex:commandButton styleclass="btn btn-danger" value="Cancel" title="Click Here to Return Back." action="{!close_Submit_btn}" />
+                   </div>
+                   <div class="col-sm-3"></div> 
+                  
+                  </div>
+                       
+                    </div> 
+                </div>
+        </div>   
+                
+    </apex:form>
+    
+    </div>
+
+</apex:page>

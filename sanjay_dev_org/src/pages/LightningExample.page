@@ -1,0 +1,73 @@
+<apex:page showHeader="false" standardStylesheets="false" sidebar="false" applyHtmlTag="false" applyBodyTag="false" docType="html-5.0"> 		   
+
+<html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"> 
+<head>
+  <title>Salesforce Lightning Design System Trailhead Module</title>
+  <apex:stylesheet value="{!URLFOR($Resource.SLDS090, 'assets/styles/salesforce-lightning-design-system.css')}" />
+</head> 
+<body>
+<div class="slds-lookup" data-select="multi" data-scope="multi" data-typeahead="false">
+  <div class="slds-form-element">
+  	<div class="slds-grid slds-form-element__control">
+      <label class="slds-form-element__label slds-text-align--right" for="lookup">
+        <p class="slds-truncate slds-align-middle">Contacts</p>
+      </label>
+      <div class="slds-dropdown-trigger slds-align-middle">
+        <svg aria-hidden="true" class="slds-icon slds-icon-standard-user slds-icon--small slds-shrink-none">
+          <use xlink:href="{!URLFOR($Resource.SLDS090, '/assets/icons/standard-sprite/svg/symbols.svg#user')}"></use>
+        </svg>
+        <button class="slds-button slds-button--icon-bare slds-button-space-left slds-shrink-none">
+          <svg aria-hidden="true" class="slds-button__icon">
+            <use xlink:href="{!URLFOR($Resource.SLDS090, '/assets/icons/utility-sprite/svg/symbols.svg#down')}"></use>
+          </svg>
+          <span class="slds-assistive-text">Filter</span>
+        </button>
+      </div>
+      <input id="lookup" class="slds-input--bare" type="text" aria-autocomplete="list" role="combobox" aria-expanded="true" aria-activedescendant="" placeholder="Search Contacts" />
+    </div>
+    <div class="slds-pill__container slds-hide"></div>
+  </div>
+  <div class="slds-lookup__menu" role="listbox">
+    <ul class="slds-lookup__list" role="presentation">
+      <li class="slds-lookup__item">
+        <a id="s01" href="#" role="option">
+          <svg aria-hidden="true" class="slds-icon slds-icon-standard-user slds-icon--small">
+            <use xlink:href="{!URLFOR($Resource.SLDS090, '/assets/icons/standard-sprite/svg/symbols.svg#user')}"></use>
+          </svg>Diana Rios</a>
+      </li>
+      <li class="slds-lookup__item">
+        <a id="s02" href="#" role="option">
+          <svg aria-hidden="true" class="slds-icon slds-icon-standard-user slds-icon--small">
+            <use xlink:href="{!URLFOR($Resource.SLDS090, '/assets/icons/standard-sprite/svg/symbols.svg#user')}"></use>
+          </svg>Nicole Woods</a>
+      </li>
+      <li class="slds-lookup__item">
+        <a id="s03" href="#" role="option">
+          <svg aria-hidden="true" class="slds-icon slds-icon-standard-user slds-icon--small">
+            <use xlink:href="{!URLFOR($Resource.SLDS090, '/assets/icons/standard-sprite/svg/symbols.svg#user')}"></use>
+          </svg>James Freeman</a>
+      </li>
+      <li class="slds-lookup__item">
+        <a id="s04" href="#" role="option">
+          <svg aria-hidden="true" class="slds-icon slds-icon-standard-user slds-icon--small">
+            <use xlink:href="{!URLFOR($Resource.SLDS090, '/assets/icons/standard-sprite/svg/symbols.svg#user')}"></use>
+          </svg>Gloria Pearson</a>
+      </li>
+      <li class="slds-lookup__item">
+        <a id="s05" href="#" role="option">
+          <svg aria-hidden="true" class="slds-icon slds-icon-standard-user slds-icon--small">
+            <use xlink:href="{!URLFOR($Resource.SLDS090, '/assets/icons/standard-sprite/svg/symbols.svg#user')}"></use>
+          </svg>Jordan Dean</a>
+      </li>
+    </ul>
+    <div class="slds-lookup__item">
+      <button class="slds-button">
+        <svg aria-hidden="true" class="slds-icon slds-icon-text-default slds-icon--small">
+          <use xlink:href="{!URLFOR($Resource.SLDS090, '/assets/icons/utility-sprite/svg/symbols.svg#add')}"></use>
+        </svg>Add Account</button>
+    </div>
+  </div>
+</div>
+</body>
+</html>
+</apex:page>

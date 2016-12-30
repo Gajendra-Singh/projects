@@ -1,0 +1,305 @@
+<apex:page controller="AssignmentQuestionController" sidebar="false">    			
+
+		<apex:includeScript value="{!URLFOR($Resource.CDNs, '/jquery-1.10.2.js')}"/>
+		<apex:includeScript value="{!URLFOR($Resource.CDNs, '/connection.js')}"/>
+					
+	<apex:form >
+	  <apex:outputpanel id="errorid">
+		<apex:pageMessages />			
+	  </apex:outputpanel>									
+		<apex:pageBlock id="PBId">
+				<apex:pageBlockSection >
+		  					<apex:pageBlockSectionItem >
+		  							
+									<apex:variable var="i" value="{!0}" />	
+										
+											<!-- Iteration of Map -->
+											<apex:repeat value="{!qsnChoiceMap}" var="Key">	  
+											   
+												<!-- This is for hide the IsHide Type Questions -->  
+												<apex:outputpanel rendered="{!IF((Key.IsHide__c==true), false, true)}">
+												
+													<apex:variable var="i" value="{!i+1}" /> 
+	                    							 Question {!i}. &nbsp;                    
+														<apex:outputlabel value="{!Key.name}" style="font-size: 15px;font-family: monospace; color: mediumblue;" />
+														    <!--{!Key.Question_Type__c}  -->
+														    <!--{!Key.Controlling_Question__c} --> 
+														    <!--{!Key.Controlling_Rule__c} -->
+														    
+														    <apex:outputpanel rendered="{!Key.IsRequirement__c}" >&nbsp; <apex:outputLabel style="color: red;" value="(Required)" /> </apex:outputpanel>
+														    				
+																<input type="hidden" class="hiddenClass" id="Hidden{!i}" value="{!Key.Id}" />
+																
+																<!-- Output Panel for Dropdown Type Questions -->
+																<apex:outputPanel rendered="{!IF(contains(Key.Question_Type__c, 'Dropdown'), true , false)}">
+																	<br />
+																	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;					
+																	<select id="{!Key.Id}" class="{!Key.id}" required="{!Key.IsRequirement__c}" >
+																		<apex:repeat value="{!qsnChoiceMap[Key]}" var="choiceListVar">
+																			<option value="{!choiceListVar.Choice_Text__c}">
+																				{!choiceListVar.Choice_Text__c}</option>
+																		</apex:repeat>
+																	</select>  
+																</apex:outputPanel>
+																
+
+																<!-- Output Panel for Checkboxes Type Questions -->
+																<apex:outputPanel rendered="{!IF(contains(Key.Question_Type__c, 'Checkboxes'), true , false)}">
+																	<apex:repeat value="{!qsnChoiceMap[Key]}" var="choiceListVar">												
+																			<br />
+																			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+																			<input id="{!Key.id}" class="{!Key.id}" type="checkbox"	name="{!choiceListVar.Choice_Text__c}" value="{!choiceListVar.Choice_Text__c}" required="{!Key.IsRequirement__c}" />  
+																			{!choiceListVar.Choice_Text__c}		                 																		         	                			   
+														           </apex:repeat>
+																</apex:outputPanel>                                        
+																
+																
+																<!-- Output Panel for Text Type Questions -->
+																<apex:outputPanel rendered="{!IF(contains(Key.Question_Type__c, 'Text'), true , false)}">
+																			<br/>
+																			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+																			<input id="{!Key.id}" class="{!Key.id}" type="Text" required="{!Key.IsRequirement__c}"/>																
+																</apex:outputPanel>
+																
+																
+				                                                <!-- Output Panel for Date Type Questions -->
+																<apex:outputPanel rendered="{!IF(contains(Key.Question_Type__c, 'Date'), true , false)}">
+																			<br/>
+																			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+																			<input id="{!Key.id}" class="{!Key.id}" type="date" required="{!Key.IsRequirement__c}" />																
+																</apex:outputPanel>   
+																
+																
+				                                                <!-- Output Panel for Time Type Questions -->
+																<apex:outputPanel rendered="{!IF(contains(Key.Question_Type__c, 'Time'), true , false)}">
+																	        <br/>
+																	        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+																			<input id="{!Key.id}" class="{!Key.id}" type="time" required="{!Key.IsRequirement__c}"/>																		
+																</apex:outputPanel>   
+															<br />  
+															<br />							
+													  
+														</apex:outputpanel>    
+																		
+												</apex:repeat>
+												<!-- Map Iteration Finish -->
+												
+									</apex:pageBlockSectionItem>
+								</apex:pageBlockSection>						
+
+						<apex:commandbutton id="btnid" onclick="RequiredFun()" rerender="errorid" value="Save" style="margin-left: 519px;"/>
+						
+			</apex:pageblock>     
+	 </apex:form>   
+				
+	  
+	<script>		
+		     
+		// It is for session id
+		sforce.connection.sessionId = '{!$Api.Session_ID}';	
+		
+		function RequiredFun()
+		{
+		 	var numberOfRequired= $("[required$='true']").length;
+			console.log('----numberOfRequired---'+numberOfRequired);
+			
+			var flag=false;
+			
+			for( var i=0; i<numberOfRequired ; i++)
+			{
+			   var requiredValue= $("[required$='true']")[i].value;
+			   console.log('------requiredValue----'+requiredValue);
+			   if(requiredValue=='')
+			   {
+			      console.log('Enter break');
+			      flag=true;		     
+			      break;
+			   }		
+			}
+			
+			if(flag)
+			{
+			  alert('Please Fill the Required Fields');			
+			}
+			else
+			{
+				SaveBtnJS();
+			}
+		
+		}
+		
+		
+		function SaveBtnJS()
+		{		
+				    var responseTextMap = {};
+				    
+					// It counts number of Questions of a page (Number of hidden text boxes that contains question id)
+					var HiddenSize= $('.hiddenClass').length;
+					
+					console.log('--size---'+HiddenSize);
+					
+					var HiddenId='';
+					
+					var HiddenIdArray = new Array();
+					
+					for( var i=1; i<=HiddenSize; i++)
+					{
+						 	console.log(i);
+						 	var tempvar = 'Hidden'+ i ;
+						 	
+							HiddenId= $("[id$="+ tempvar +" ]").val();
+							
+							console.log('---HiddenId---'+HiddenId); 
+							
+							var ResponseText='';
+							
+							// this condition for Select List
+							if( document.getElementById(HiddenId).tagName == 'SELECT')
+							{
+								console.log('----class----'+document.getElementById(HiddenId).tagName);    
+								
+								ResponseText= document.getElementById(HiddenId).value;									
+								
+							}
+							
+							
+							// this condition for text
+							if( document.getElementById(HiddenId).type == 'text')			
+							{
+								console.log('----class----'+document.getElementById(HiddenId).type);    
+								
+								ResponseText= document.getElementById(HiddenId).value;			  
+								console.log('----------textttt-----------------******'+	ResponseText);	   				
+								
+							}
+							
+							// this condition for date
+							if( document.getElementById(HiddenId).type == 'date')
+							{
+								console.log('----class----'+document.getElementById(HiddenId).type);    
+								
+								ResponseText= document.getElementById(HiddenId).value;									
+								
+							}
+										
+							// this condition for time
+							if( document.getElementById(HiddenId).type == 'time')
+							{
+								console.log('----class----'+document.getElementById(HiddenId).type);    
+								
+								ResponseText= document.getElementById(HiddenId).value;					  				
+								
+							}
+							
+							// this condition for check boxes
+							if( document.getElementById(HiddenId).type == 'checkbox')
+							{
+							  
+							    console.log('-------type---'+document.getElementById(HiddenId).type);
+							   
+							    var checkedValueLength = $('.' + HiddenId + ':checked').length;
+								console.log('checkedValue--------'+checkedValueLength);
+								
+								for(var j=0; j<checkedValueLength; j++)
+								{
+									var optionVar = $('.' + HiddenId + ':checked')[j].value;
+								  	console.log(' optionVar-----'+ optionVar);
+									ResponseText += optionVar+';';
+								}
+								
+								ResponseText= ResponseText.slice(0, -1); 
+							} 
+							
+							 
+							console.log('---HiddenId---'+HiddenId);      
+							console.log('----ResponseText---'+ResponseText);	      
+					       
+					        HiddenIdArray.push(HiddenId);
+					        
+					        responseTextMap[HiddenId] = ResponseText;					       
+					}
+			
+					console.log('-----HiddenIdArray----'+HiddenIdArray.length);
+				    console.log('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++');
+					
+					var recordsForUpsert = [];   
+					
+					try
+					{		     				
+								var query= sforce.connection.query("Select Id,Survey_Question__c,Survey_Assignment__c From Survey_Answer__c where Survey_Assignment__c = \'"+ '{!assignId}' + "\'");
+							    var records = query.getArray("records");					    
+								console.log('111'+query);  
+								
+								
+								for(var i=0; i<HiddenIdArray.length; i++)
+								{		
+									
+									 var ans_Obj = new sforce.SObject("Survey_Answer__c");
+									 
+									 console.log('key-----'+HiddenIdArray[i]);
+									 console.log('value---'+responseTextMap[HiddenIdArray[i]]); 									
+										
+									 ans_Obj.Survey_Question__c = HiddenIdArray[i];
+									 ans_Obj.Response_Text__c = responseTextMap[HiddenIdArray[i]]+' ';
+									 ans_Obj.Survey_Assignment__c= '{!assignId}';
+									
+											if(records.length>0)
+											 {			
+											 	  for (var j=0; j< records.length; j++)   
+												  {
+													    var record = records[j];												    											    
+													    if(HiddenIdArray[i] == record.Survey_Question__c)
+													    {
+													       console.log('---id matched----');		
+													       ans_Obj.Id = record.Id;
+													    } 
+												  }			 	
+											    		
+											      console.log('--ans_Obj---'+ans_Obj.Id);						     
+											      	       
+											 }
+											 else
+											 {
+											 	console.log(' try elsee-----');
+											 				 
+											 
+											 }
+											 
+											 			  	   
+									
+									recordsForUpsert.push(ans_Obj);							
+										
+							   }
+												
+						 	
+													
+							console.log('---recordsForUpsert---------'+recordsForUpsert.length); 
+							// this will update the Record
+							         
+						        result = sforce.connection.upsert("Id", recordsForUpsert); 
+											
+								if(result[0].getBoolean("success") && result[0].id == ans_Obj.Id) 
+								{
+								
+									alert("upsert updated the account as expected");   
+								}
+								else
+								{
+									alert('Records Inserted Successfully');
+									 console.log('Enter in else condition');
+								}
+								
+							
+								 	 
+								
+				    }
+				    catch (error)
+				    {
+				    		console.log('errror');
+				    		alert(error.faultstring);
+				    }      	   																
+		}   	
+		
+	</script>
+	
+</apex:page>

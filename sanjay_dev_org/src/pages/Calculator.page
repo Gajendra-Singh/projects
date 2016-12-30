@@ -1,0 +1,28 @@
+<apex:page controller="Calculator">
+
+<script>
+ 
+ function Fun()
+ {
+   $("[id$='txtid']")
+   
+ }
+
+</script>
+<apex:form >
+    
+    <apex:pageBlock >
+        <apex:pageBlockSection >
+            <apex:pageBlockSectionItem id="id1" >
+                <apex:outputLabel value="Value 1"/>  
+                <apex:inputText id="txtid" value="{!val1}" />  
+            </apex:pageBlockSectionItem>
+            
+            <apex:commandbutton action="{!add}" value="+" rerender="id1" />
+            <apex:commandbutton action="{!equal}" value="=" rerender="id1" />  
+        </apex:pageBlockSection>
+     </apex:pageBlock>
+            
+</apex:form>
+
+</apex:page>

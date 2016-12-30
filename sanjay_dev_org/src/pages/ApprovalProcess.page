@@ -1,0 +1,321 @@
+<apex:page controller="ApprovalProcessController" sidebar="false" showheader="false" standardStylesheets="false">
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"/>
+	<script src="https://code.jquery.com/jquery-1.10.2.js" />
+	
+ <!-- code for Action Status -->
+    <style>			  
+	        #blockbckanim{  
+	        background-color:rgba(196, 204, 220, 0.8);  
+	        width:100%;  
+	        height:100%;
+	        position: absolute;
+	        top: 0px;
+	        left: 0px;			
+	        z-index: 1000;
+	        rgba(0, 0, 0, 0.71);
+	        cursor: wait;
+	        }
+	        
+	        #apimgld {
+			    top: 33%;
+			    left: 44%;
+			    position: fixed;
+			    border-radius: 2px;
+			    -webkit-border-radius: 2px;
+			    -moz-border-radius: 2px;
+			    background-color: #EEF3FD;
+			    padding: 1%;
+			    height: 10%;
+			    -width: 16%;
+			    font-size: large;
+			    border-bottom-left-radius: 15px;
+			    border-bottom-right-radius: 15px;
+			    border-top-right-radius: 15px;
+			    border-top-left-radius: 15px;
+			}	           
+    </style>
+    
+    <div id="blockbckanim" style="display:none">
+            <div id="apimgld"  >
+                <img src="http://www.clinicalxy.com/styles/images/progress_circle.gif"  style="height: 30px; margin-left: 30%; margin-top: -11px;" />&nbsp;&nbsp;<br/>
+                <h4 style="margin-left: 11px;">Please Wait..</h4>
+            </div>
+    </div>  
+      
+    <script>
+	      function ShowLoading() 
+	        {
+	            document.getElementById('blockbckanim').style.display="block";
+	        }
+	        function HideLoading()
+	        {
+	            document.getElementById('blockbckanim').style.display="none";
+	        }
+ 	</script>				
+ <!-- Finish action Function -->	
+ 
+ <style type="text/css">
+		table.imagetable {
+			font-family: verdana,arial,sans-serif;
+			font-size:11px;
+			color:#333333;
+			border-width: 1px;
+			border-color: #999999;
+			border-collapse: collapse;
+		}
+		table.imagetable th {
+			background:#b5cfd2 url('cell-blue.jpg');
+			border-width: 1px;
+			padding: 8px;
+			border-style: solid;
+			border-color: #999999;
+		}
+		table.imagetable td {
+			background:#dcddc0 url('cell-grey.jpg');
+			border-width: 1px;
+			padding: 8px;
+			border-style: solid;
+			border-color: #999999;
+		}
+</style>
+ 
+ 
+ <!-- Dynamic JavaScript Table -->
+  <SCRIPT language="javascript">
+  
+        function addRow(tableID) 
+        {
+ 
+            var table = document.getElementById(tableID);
+ 
+            var rowCount = table.rows.length;
+            var row = table.insertRow(rowCount);
+ 
+            var colCount = table.rows[0].cells.length;
+ 
+            for(var i=0; i<colCount; i++) 
+            {
+ 				
+ 			         var newcell = row.insertCell(i);
+	 
+	                newcell.innerHTML = table.rows[0].cells[i].innerHTML;
+	                //alert(newcell.childNodes);
+	                switch(newcell.childNodes[0].type) 
+	                {
+	                    case "text":
+	                            newcell.childNodes[0].value = "";
+	                            break;
+	                    case "checkbox":
+	                            newcell.childNodes[0].checked = false;
+	                            break;
+	                    case "select-one":
+	                            newcell.childNodes[0].selectedIndex = 0;
+	                            break;
+	                }
+	         }
+        }
+ 
+        function deleteRow(tableID) 
+        {
+	            try {
+	            var table = document.getElementById(tableID);
+	            var rowCount = table.rows.length;
+	 
+	            for(var i=0; i<rowCount; i++) 
+	            {
+	                var row = table.rows[i];
+	                var chkbox = row.cells[0].childNodes[0];
+	                if(null != chkbox && true == chkbox.checked) 
+	                {
+	                    if(rowCount <= 1) 
+	                    {
+	                        alert("Cannot delete all the rows.");
+	                        break;
+	                    }
+	                    table.deleteRow(i);
+	                    rowCount--;
+	                    i--;
+	                }
+	 
+	 
+	            }
+	            }
+	            catch(e) 
+	            {
+	                alert(e);
+	            }
+        }
+        
+        
+        function TableMapFunction()
+        {        	     	
+        
+	        	var table = document.getElementById('dataTable'), 
+			    rows = table.getElementsByTagName('tr'),
+			    i, j, cells, customerId;
+				
+				var TableMap= new Map();
+			    
+				for (i = 0;  i< rows.length; i++) 
+				{
+				
+					var UserTextBoxJS= document.getElementsByClassName('UserTextBox')[i].value;
+	              	
+					var UserCheckedCheckBoxsJS=[];
+					
+					var UserCheckBoxJS=rows[i].getElementsByClassName('UserCheckBox');
+					
+					for (var j=0; j<UserCheckBoxJS.length; j++) 
+					{
+						     // And stick the checked ones onto an array...
+						     if (UserCheckBoxJS[j].checked) 
+						     {
+						        UserCheckedCheckBoxsJS.push(UserCheckBoxJS[j].value);
+	     					 }
+	     		    }
+					
+					TableMap.set(UserTextBoxJS,UserCheckedCheckBoxsJS);
+				    
+				}
+				
+				console.log('-11-TableMap---'+TableMap.size);
+				
+				var mapdata = '' ;
+				for (var key of TableMap.keys()) 
+				{
+					mapdata += key+'#'+TableMap.get(key)+';';					
+				}
+				
+				document.getElementById('j_id0:FrmId:InputHiddenID').value= mapdata;				
+			
+				console.log('--'+document.getElementById('j_id0:FrmId:InputHiddenID').value);
+			
+		 		console.log('---finish---'+mapdata);
+        
+       }
+ 
+    </SCRIPT>
+     
+<apex:form id="FrmId" Style="background-color: #D9EDF7;" >   
+ 
+	<apex:actionStatus id="W8" onStart="ShowLoading();" onstop="HideLoading();"/> 
+<apex:outputpanel id="Opmsg">
+	
+	<div class="alert alert-info">  
+		<apex:pagemessages />
+	</div>
+
+</apex:outputpanel>        
+   
+<div class="container" Style="background-color: #E4E2E2;height: 975px;">
+	  
+		<apex:outputPanel id="OuterOPId">	   
+			    
+					<br/>
+					<br/>
+				
+				<div class="row">
+					<div class="col-sm-2 col-md-2 col-xs-2">  </div>
+					<div class="col-sm-4 col-md-4 col-xs-4" align="right"> <font size="3"> <Strong style="color: #FFFFFF;"> Metadata Approval Process </Strong> </font> </div>
+					<div class="col-sm-6 col-md-6 col-xs-6">  </div>
+				</div>			
+					
+					<br/>
+					<br/>						
+						
+				<apex:actionFunction name="objSelectAF" action="{!FirstUnanimousMethod}" reRender="FirstUnanimousOPId"  status="W8" /> 
+						
+				<!--  Code to Display the all Object into the Select List -->		 
+				<div class="row">
+					<div class="col-sm-3 col-md-3 col-xs-3" align="right">  <Strong style="color: #FFFFFF;"> Select Object </Strong> </div>
+					<div class="col-sm-1 col-md-1 col-xs-1"> </div>
+					<div class="col-sm-4 col-md-4 col-xs-4">
+						<apex:selectList multiselect="false"  size="1" value="{!selectedObject}" onchange="objSelectAF();" styleclass="form-control" style="width: 200px;">
+		                <apex:selectOption itemLabel="--None--" itemValue="None" />
+		                <apex:selectOptions value="{!AllObjects}" />               
+		            	</apex:selectList>		            	
+		            </div> 
+	                <div class="col-sm-4 col-md-4 col-xs-4"> </div>
+	            </div>				
+					<br/>
+					<br/>
+				
+				
+				<apex:actionFunction name="getUserLstAF" reRender="OuterOPId" action="{!getUserLstMethod}"  status="W8" /> 
+			 
+			 	<!-- Code to Display FIRST & UNANIMOUS response -->
+		 		<apex:outputPanel Id="FirstUnanimousOPId">	 		
+						 	<apex:outputpanel rendered="{!IF(FirstUnanimousFlag==true,true,false)}">
+									  <div class="row"> 
+											  <div class="col-sm-3 col-md-3 col-xs-3" align="right">  <Strong style="color: #FFFFFF;">Choose Approval Step </Strong></div>
+											  <div class="col-sm-1 col-md-1 col-xs-1"> </div>
+											  <div class="col-sm-4 col-md-4 col-xs-4">	
+												 	<apex:SelectRadio value="{!stepValue}" layout="pageDirection" styleclass="radio" onchange="getUserLstAF();">
+															<apex:selectoption itemLabel="Approve or reject based on the FIRST response."  itemvalue="FirstResponse" />
+															<apex:selectoption itemLabel="UNANIMOUS approval from all selected approvers." itemvalue="Unanimous" />
+													</apex:SelectRadio> 
+											 </div>
+											 <div class="col-sm-4 col-md-4 col-xs-4"> </div>			       
+								    </div>							    	 
+							 </apex:outputpanel>
+				</apex:outputPanel>			 
+				 <br/>
+				 <br/>	
+	<apex:outputpanel id="User_RR" >	
+				<apex:outputpanel rendered="{!IF(DynamicTableFlag==true,true,false)}">				
+						<!-- Code for Approval Subject Label & input Text  -->			
+							<div Class="row">
+									<div class="col-sm-3 col-md-3 col-xs-3" align="right"> <Strong style="color: #FFFFFF;"> Approval Subject </Strong></div>
+									<div class="col-sm-1 col-md-1 col-xs-1"> </div>
+									<div class="col-sm-3 col-md-3 col-xs-3">
+											<apex:inputText id="inputTextId" Styleclass="form-control"  value="{!approvalMsg}" style="width: 100% !important;"/>									
+									</div>
+									<div class="col-sm-5 col-md-5 col-xs-5"> </div>
+							</div>							
+								<br/>
+								<br/>					
+					<!-- Dynamic Table to add users -->			
+						<div Class="row">
+							<div class="col-sm-4 col-md-4 col-xs-4"> </div>
+							<div class="col-md-8 col-sm-8 col-xs-8"> 
+									<INPUT type="button" class="btn btn-info" value="Add Step" onclick="addRow('dataTable')" />	 
+								    <INPUT type="button" class="btn btn-info" value="Delete Step" onclick="deleteRow('dataTable')" />
+								 <div class="table-responsive">
+								    <TABLE id="dataTable" width="500px" border="1" class="imagetable">
+								    	
+								        <TR >
+								            <TD><input type="checkbox" value="a" /></TD>
+								            <TD Style="width: 100px;"><apex:inputText StyleClass="UserTextBox form-control"  Style=" width: 120px;height: 30px; !important"/></TD>
+								            <TD>
+								            	<apex:repeat value="{!UserValuesMap}" var="key" >
+								                	<label class="checkbox-inline"><input type="checkbox" class="UserCheckBox"/>{!key} </label><br/>
+								                </apex:repeat>								                
+								            </TD>
+								        </TR>
+	  								</TABLE>
+	  							</div>
+							</div>							
+					     </div>
+					     			
+							<br/>
+							<br/>
+						<!--  code for the submit button -->							 
+							<div class="row"> 
+							<div class="col-sm-2 col-md-2 col-xs-2">   </div>
+							<div class="col-sm-3 col-md-3 col-xs-3">   </div>
+							<div class="col-sm-2 col-md-2 col-xs-2" align="right">  			
+							   <apex:outputPanel >
+					                <center>
+					             	   <apex:inputHidden value="{!mapDataTXT}" id="InputHiddenID"/>
+					                   <apex:commandButton value="submit" reRender="Opmsg" onclick="TableMapFunction()" action="{!createApprovalProcess}"  status="W8" Styleclass="btn btn-info"/>
+					               </center>
+			            	  </apex:outputPanel>			
+						   </div>			 
+					       </div> 
+			      </apex:outputpanel>			
+	          </apex:outputpanel>
+	    </apex:outputPanel>
+    </div>
+</apex:form>
+</apex:page>

@@ -1,0 +1,15 @@
+<apex:page standardStylesheets="false" sidebar="false" controller="ProgressBarController">
+
+	<c:ProgressBar UIElements="{!stageValue}" StageName="{!OppObject.StageName}"/>    
+<!-- <apex:form >	  
+	<apex:pageBlock >
+		  <apex:pageBlockSection >
+			  	   <apex:inputField value="{!OppObject.id}"/> 
+			  	   <apex:inputField value="{!OppObject.name}"/>    
+			  	   <apex:inputField value="{!OppObject.Amount}"/> 
+			  	   <apex:inputField value="{!OppObject.CloseDate}"/>  
+			  	   <apex:inputField value="{!OppObject.StageName}"/> 
+	  	   </apex:pageBlockSection>
+	</apex:pageBlock>
+</apex:form> -->
+</apex:page>

@@ -1,0 +1,12 @@
+<apex:page sidebar="false" showHeader="false">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"/>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"/>
+<body class="info">
+<div class="cantainer">
+    <h1> Online Examination </h1> 
+      
+    
+ </div>
+    </body>
+</apex:page>

@@ -1,0 +1,6 @@
+<apex:page docType="html-5.0" standardStylesheets="false">
+
+<!--     <c:autoCompleteTypeaheadComponent objectname="aaaabbbb__Merchandise__c" fieldsname="Name, Price__c" />                                    -->
+<c:autoCompleteTypeaheadComponent objectname="User" fieldsname="Name, Username" />            
+                    
+</apex:page>

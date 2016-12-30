@@ -1,0 +1,32 @@
+<apex:page sidebar="false" showHeader="true" standardStylesheets="false" applyHtmlTag="true" applyBodyTag="false" docType="html-5.0">
+  <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <head>
+        <apex:includeScript value="{!$Resource.jquery_1_11_3}" />
+        <apex:stylesheet value="{!URLFOR($Resource.SLDS212,  '/assets/styles/salesforce-lightning-design-system.css')}" />
+     </head>
+ <div class="slds">  
+   <fieldset class="slds-form-element">
+    <legend class="slds-form-element__legend slds-form-element__label">Radio Group Label</legend>
+  <div class="slds-form-element__control">
+    <label class="slds-radio">
+      <input type="radio" name="options" />
+      <span class="slds-radio--faux"></span>
+      <span class="slds-form-element__label">Radio Label One</span>
+    </label>
+    <label class="slds-radio">
+      <input type="radio" name="options" />
+      <span class="slds-radio--faux"></span>
+      <span class="slds-form-element__label">Radio Label Two</span>
+    </label>
+  </div>
+</fieldset>
+<div class="slds-form-element">
+  <label class="slds-form-element__label" for="text-input-01">Input Label</label>
+  <div class="slds-form-element__control">
+    <input id="text-input-01" class="slds-input" type="text" placeholder="Placeholder Text" />
+  </div>
+</div>
+  </div>
+    
+</html>
+</apex:page>

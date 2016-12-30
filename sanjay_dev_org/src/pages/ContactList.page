@@ -1,0 +1,47 @@
+<apex:page standardController="contact" recordSetVar="data" >
+    <apex:form >
+    <apex:pageBlock title="contacts List" id="contacts_list">
+        
+        Filter:
+        <apex:selectList value="{! filterId}" size="1">
+            <apex:selectOptions value="{! listViewOptions}"/>
+            <apex:actionSupport event="onchange" reRender="contacts_list"/>
+       </apex:selectList>
+        
+        <apex:pageBlockTable value="{! data}" var="ct">
+            <apex:column value="{! ct.firstName}"/>
+            <apex:column value="{! ct.lastName}"/>
+            <apex:column value="{! ct.Email}"/>
+             <apex:column value="{! ct.Account.Name}"/>
+            
+        
+        </apex:pageBlockTable>
+    
+    
+    </apex:pageBlock>
+        
+        Page: <apex:outputText value="{! PageNumber} of {! CEILING(ResultSize/PageSize)}"/>
+        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+        
+        <apex:commandLink action="{! Previous}" value="<< Previous" rendered="{! HasPrevious}"/>
+        <apex:outputText style="color: #CCC;" value="<<Previous" rendered="{! Not(HasPrevious)}" />
+        
+        &nbsp;&nbsp;
+        
+        <apex:commandLink action="{! Next}" value="Next >>" rendered="{! HasNext}"/>
+        <apex:outputText style="color: #CCC;" value="Next >>" rendered="{! NOT(HasNext) }"/>
+        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+        
+       Record Per Page:-
+        
+         <apex:selectList value="{! PageSize}" size="1">
+            <apex:selectOption itemValue="5" itemLabel="5"/>
+            <apex:selectOption itemValue="20" itemLabel="10"/>
+            <apex:actionSupport event="onchange" reRender="contacts_list" />
+        </apex:selectList>
+    </apex:form>
+    
+    
+</apex:page>

@@ -1,0 +1,13 @@
+<apex:page controller="SendEmailClass" >
+    <apex:form >
+    <apex:pageBlock title="sending">
+        
+        
+        <apex:commandButton action="{!emailSent}"  value="test"/>
+        
+        </apex:pageBlock>
+       
+    
+    </apex:form>
+    
+</apex:page>

@@ -1,0 +1,14 @@
+<apex:page controller="AssignmentController" sidebar="false">							
+<apex:form >																	
+	   <apex:variable var="i" value="{!0}"/> 
+	   <apex:pageBlock title="Survey Assignments">	   		
+	        <apex:pageblockTable value="{!surveyAssignmentList}" var="assLstVar">
+	            <apex:column >
+	                <apex:variable var="i" value="{!i+1}"/> 
+	                 {!i}. &nbsp; 
+	                 <apex:outputLink target="_blank" value="AssignmentQuestionPage?id={!assLstVar.id}">{!assLstVar.Name}</apex:outputLink>
+	            </apex:column>
+	        </apex:pageblockTable>   						
+    </apex:pageblock>   
+</apex:form>
+</apex:page>

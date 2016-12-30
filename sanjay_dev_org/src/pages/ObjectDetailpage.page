@@ -1,0 +1,69 @@
+<apex:page controller="objectController" sidebar="false">
+   
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"/>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"/> 
+       
+    <apex:form >
+        <apex:outputpanel >      
+           <apex:actionstatus id="lad">
+               <apex:facet name="start">
+                   <div class="waitingSearchDiv" id="el_loading" style="background-color: #DCD6D6;
+                          height: 100%;opacity:0.65;width:100%;"> 
+                       <div class="waitingHolder" style="top: 74.2px; width: 91px;">
+                           <img class="waitingImage" src="/img/loading.gif" title="Please Wait..." />
+                           <span class="waitingDescription">loading...</span>
+                       </div>
+                   </div>       
+               </apex:facet>
+           </apex:actionstatus>
+        </apex:outputpanel>
+       <apex:pageBlock id="viewField_RR" > 
+            <apex:actionFunction name="apxobjectfield" action="{!objectfields}" reRender="viewField_RR,a1" status="lad" /> 
+          
+                <apex:pageMessages id="Error_msg"> </apex:pageMessages>
+            
+            
+        <apex:pageBlockSection title="Choose Any Object">              
+            <Center>'
+            <apex:selectList multiselect="false" size="1" onchange="apxobjectfield();" value="{!selectedobjstr}" styleClass="form-control" style="width: initial; !important">
+                <apex:selectOption itemLabel="--None--" itemValue="None" />
+                <apex:selectOptions value="{!allobjects}" />               
+            </apex:selectList>
+            </Center>
+        </apex:pageBlockSection>
+            
+        <apex:outputPanel >       
+
+            <apex:pageBlockSection columns="3" title="Object Fields are"  rendered="{!IF(Selectedfields.size > 0 ,true ,false)}">
+            
+            <apex:repeat value="{!Selectedfields}" var="f" >            
+                <apex:inputField value="{!selectedobject[f]}" required="false" />                               
+            </apex:repeat>
+                      
+            </apex:pageBlockSection>   
+                
+               <center>
+               <apex:commandButton value="Search Result" action="{!getFields}" reRender="searchResult_RR,Error_msg" rendered="{!IF(Selectedfields.size > 0 ,true ,false)}" status="lad" /> 
+               </center>
+        </apex:outputPanel>   
+       
+       <apex:outputPanel id="searchResult_RR">        
+          <apex:pageBlockSection title="Records are" rendered="{!If(ObjectList.size >0 ,true ,false)}">
+             <apex:pageBlockTable value="{!ObjectList}" var="obj" >
+                <apex:repeat value="{!filledfields}" var="fillf">
+                    <apex:column value="{!obj[fillf]}" />
+                </apex:repeat>
+            </apex:pageBlockTable>
+        </apex:pageBlockSection>
+                     
+            <center>
+            <apex:commandButton value="Download CSV" action="{!export}" rendered="{!IF(ObjectList.size > 0 ,true, false)}" status="lads" />
+            </center>
+       </apex:outputPanel>
+               
+        </apex:pageBlock>               
+         </apex:form>
+    
+    
+</apex:page>

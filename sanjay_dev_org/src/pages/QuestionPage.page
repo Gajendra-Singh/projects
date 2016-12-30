@@ -1,0 +1,207 @@
+<apex:page controller="QuestionController"  standardStylesheets="false"  sidebar="false" showheader="false"   >
+
+    
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"/> 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"/>
+    <apex:stylesheet value="{!URLFOR($Resource.bootstrap, 'css/bootstrap.min.css')}"/>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"/> 
+
+    
+	 <script>
+		      
+		      var seconds = {! paperTime} - Math.ceil(Date.now()/1000); 
+		      
+		 	 function timer() {
+		      var days        = Math.floor(seconds/24/60/60);
+		      var hoursLeft   = Math.floor((seconds) - (days*86400));
+		      var hours       = Math.floor(hoursLeft/3600);
+		      var minutesLeft = Math.floor((hoursLeft) - (hours*3600));
+		      var minutes     = Math.floor(minutesLeft/60);
+		      var remainingSeconds = seconds % 60;
+		      if (remainingSeconds < 10) {
+		          remainingSeconds = "0" + remainingSeconds; 
+		      }
+		      document.getElementById('countdown').innerHTML =  hours + ":" + minutes + ":" + remainingSeconds;
+		      if (seconds == 0) {
+		          clearInterval(countdownTimer);
+		          
+		          TimerMethod();
+		          
+		      } else {
+		          seconds--;
+		      }
+		  	}
+		 	 var countdownTimer = setInterval('timer()', 1000);
+				 
+      </script>    
+     
+    
+     <!-- Css and Java Script for the action status -->
+       
+        <div id="blockbckanim" style="display:none">
+            <div id="apimgld"  >
+                <img src="/img/loading32.gif" style="height: 25px; margin-left: 40%;" />&nbsp;&nbsp;
+                <h3> Please wait...</h3>
+            </div>
+        </div>
+    
+     <style>
+        #blockbckanim{
+        background-color:rgba(196, 204, 220, 0.8);
+        width:100%;
+        height:100%;
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        z-index: 1000;
+        rgba(0, 0, 0, 0.71);
+        cursor: wait;
+        }
+        #apimgld{
+        top:36%;
+        left:45%;
+        position:fixed;
+        border-radius: 2px;
+        -webkit-border-radius: 2px ;
+        -moz-border-radius: 2px ;
+        background-color: #EEF3FD;
+        padding: 1%;
+        height: 4%;
+        width: 10%;
+        font-size: large;
+        border-bottom-left-radius: 15px;
+        border-bottom-right-radius: 15px;
+        border-top-right-radius: 15px;
+        border-top-left-radius: 15px;
+        margin-left: -30px;
+        height: 10%;
+        
+
+        }
+        
+    </style>
+    
+    <script type="text/javascript" language="javascript">
+        function ShowLoading() {
+            document.getElementById('blockbckanim').style.display="block";
+        }
+        function HideLoading() {
+            document.getElementById('blockbckanim').style.display="none";
+        }
+    </script>
+   
+        
+<div class="enact">
+      <apex:form id="btn_RR">    
+          <!-- This Action Function is used for the Timer -->
+      	 <apex:actionFunction name="TimerMethod" action="{!Submitbtn2}" />
+          <!-- This Action Status is used for the Loading page -->
+         <apex:actionStatus id="lad" onStart="ShowLoading();" onstop="HideLoading();" />
+         <br/>
+         <br/>
+         
+      
+       	 <div class="row">
+          
+          <div class="page header" style="background-color:bisque;" align="center" > <font size="5"> {!papername} </font></div>
+             
+         </div>
+         <br/>
+ <div class="container">     
+        <div class="alert alert-danger">
+               <apex:pageMessages >  </apex:pageMessages>
+        </div>
+     
+        	 <br/>
+         	<br/>
+         <div class="row">
+            <div class="col-sm-2"> </div>
+            <div class="col-sm-6"> </div>
+            <div class="col-sm-2" align="right"> <Strong> Remaining Time </Strong></div>
+            <div class="col-sm-2"> <Strong> <div id="countdown" class="col-sm-1"> </div> </Strong></div>
+            
+         </div>
+       
+        <apex:repeat value="{!qsnLst}" var="ac">
+            <div class="row">
+                    
+                <div class="col-sm-2"> Question No.{!ac.Name} </div> 
+            
+                <div class="col-sm-6"> <apex:outputLabel value="{!ac.Question__c}" escape="false" />  </div>
+                    
+                <div class="col-sm-2"> </div>                
+                    
+                <div class="col-sm-2"> <span class="label label-info" ><u> Marks : {!ac.Point__c} </u></span></div> 
+            </div>  
+                <br/>
+           <div class="row">
+                
+                 <div class="col-sm-2"> </div> 
+                 <apex:outputPanel rendered="{!IF(qsnLst[0].Multiple__c =='YES', true, false)}" >
+                 
+                 <div class="col-sm-6"> <Strong>Note:- </Strong> <u> Select {!ac.ansno__c} Correct Options  </u> </div>
+                
+                 </apex:outputPanel>
+                 <div class="col-sm-2"> </div> 
+                
+           </div>
+       </apex:repeat> 
+                    
+                    <br/>                   
+        <div class="row">
+            
+            <div class="col-sm-3">   </div>
+    
+            <div class="col-sm-8">         
+    
+                             <!-- To Display CheckBoxes -->  
+                             <apex:selectCheckBoxes value="{!Selected_Check_Options}" layout="pageDirection" styleclass="checkbox-inline"  rendered="{!IF(qsnLst[0].Multiple__c =='YES', true, false)}">                 
+                                           <div>  <apex:selectoptions value="{!OptionLst_select}" />  </div>
+                             </apex:selectCheckBoxes>
+                                 
+                                
+                             <!-- To Display Radio Buttons -->    
+                             <apex:selectRadio layout="pageDirection" value="{!Selected_Radio_Option}" rendered="{!IF(qsnLst[0].Multiple__c =='NO', true, false)}" >
+                      					<div>  <apex:selectoptions value="{!OptionLst_select}" />  </div>
+                             </apex:selectRadio>
+       		</div>                     
+           <div class="col-sm-2">       </div>  
+        </div>
+             
+          <br/> 
+         
+       <div class="row">
+              <div class="col-sm-2" align="right">
+              <label>Mark as Unread</label> 
+              </div>
+              
+              <div class="col-sm-6">
+                    <apex:inputCheckbox styleclass="checkbox" value="{!Mark_Option}" />
+              </div>
+              
+              <div class="col-sm-4">
+              </div>
+       </div>
+           
+           <br/> <br/>
+           
+     <div class="row">
+             
+            <div class="col-sm-3">  </div> 
+    
+            <div class="col-sm-6">  
+      				  <apex:commandButton value="< PREVIOUS" action="{!prvbtn}" disabled="{!prv}" reRender="btn_RR" status="lad" styleclass="btn btn-info"/>
+                      &nbsp;
+                      <apex:commandButton value="NEXT >" action="{!nextbtn}" disabled="{!nxt}" reRender="btn_RR" status="lad" styleclass="btn btn-info" />
+                      &nbsp;&nbsp; &nbsp;
+                      <apex:commandButton value="REVIEW" action="{!reviewbtn}" disabled="{!rev}"  title="Click Here To View Marked Questions" status="lad" styleclass="btn btn-info" />
+                      &nbsp;
+                      <apex:commandButton value="SUBMIT" action="{!submitbtn1}"   status="lad" styleclass="btn btn-info" />
+           </div>
+          <div class="col-sm-4">    </div> 
+    </div> 
+      
+  </div>
+  </apex:form>
+ </div>
+</apex:page>

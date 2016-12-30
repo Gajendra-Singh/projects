@@ -1,0 +1,6 @@
+<apex:page controller="accountList" contentType="text/csv#AccountRecords.csv" >"Id","name","Site","Billing Address","Phone","Type","OwnerId" 
+	<apex:repeat value="{!contain}" var="ch">
+        <apex:outputText escape="false" />
+        {!ch.id} ,"{!ch.name}","{!ch.site}" ,"{!ch.BillingState}" ,"{!ch.phone}" ,"{!ch.type}" ,"{!ch.OwnerId}"     
+    </apex:repeat>
+</apex:page>

@@ -1,0 +1,56 @@
+<apex:page standardcontroller="Job_Detail__c" extensions="JobScoreController">
+
+<Table border="1" style="border-spacing: 0px;" width="100%">
+	<apex:repeat value="{!jobDetailObj}" var="header" >	
+			
+			<td style="font-family: fantasy;">{!header.name}</td>  
+			
+			<td style="font-family: fantasy;"> Quali: {!header.Qualification__c} </td>		
+			
+			<td style="font-family: fantasy;"> Spoken Lang: {!header.Spoken_Language__c} </td>		
+			
+			<td style="font-family: fantasy;">Technical Lang: {!header.Technical_Language__c} </td>		
+			
+			<td style="font-family: fantasy;">Experience: {!header.Experience__c} </td>		
+						
+			<td style="font-family: fantasy;">Score </td>	
+	    		  
+	</apex:repeat>    
+
+	
+	<apex:repeat value="{!listWrapper}" var="wrObj" >	
+		<tr>
+			<td>{!wrObj.WAppName}</td>    
+			
+			<td>
+				<apex:repeat value="{!wrObj.WAppQualification}" var="qual">
+				 <span style="background-color:{!qual.color}; color: white;"> {!qual.Text} </span> &nbsp;<!-- {!qual.color} -->
+				</apex:repeat>
+			</td>
+			
+			<td>
+			    <apex:repeat value="{!wrObj.WAppSpokenLanguage}" var="spoken">
+			    <span style="background-color:{!spoken.color}; color: white;"> {!spoken.Text}  </span> &nbsp;
+			    </apex:repeat>			
+			</td>
+			
+			<td>
+			    <apex:repeat value="{!wrObj.WAppTechnicalQual}" var="TechQual">
+			    <span style="background-color:{!TechQual.color}; color: white;"> {!TechQual.Text} </span> &nbsp;
+			    </apex:repeat>							
+			</td>
+			
+			<td>
+			    <apex:repeat value="{!wrObj.WAppExperience}" var="Experience">
+			    <span style="background-color:{!Experience.color}; color: white;"> {!Experience.Text} </span> &nbsp;
+			    </apex:repeat>							
+			</td>
+			
+			<td>
+			     <span style="background-color: green; color: white;"> {!wrObj.WAppScore}% </span> &nbsp;			   						
+			</td>
+	    </tr>			  
+	</apex:repeat>  
+</Table>   
+
+</apex:page>

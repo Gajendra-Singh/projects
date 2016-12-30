@@ -1,0 +1,18 @@
+<apex:page controller="objectController" contentType="text/csv#Contact.csv">
+    <apex:repeat value="{!filledfields}" var="objlis">
+        <apex:outputText value="{!objlis}" escape="false" />,       
+    </apex:repeat>
+    <br/>
+    
+     <apex:repeat value="{!filledfields}" var="obj">
+         <apex:repeat value="{!objvalue}" var="val">
+           
+            <apex:outputText value="{!val}" escape="true" />,
+        
+        </apex:repeat>
+         <br/>
+    </apex:repeat>
+        
+    
+    
+</apex:page>

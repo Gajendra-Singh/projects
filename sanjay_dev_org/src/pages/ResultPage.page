@@ -1,0 +1,31 @@
+<apex:page controller="QuestionController" sidebar="false" showheader="false" standardStylesheets="false"  doctype="html-5.0" >
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"/> 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"/>
+    <apex:stylesheet value="{!URLFOR($Resource.bootstrap, 'css/bootstrap.min.css')}"/>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"/>  
+<br/>
+         <br/>
+         
+      
+       	<div class="row">
+          
+          <div class="page header" style="background-color:bisque;" align="center" > <font size="5"> {!papername} </font></div>
+             
+         </div>
+         <br/>
+<br/><br/><br/><br/><br/><br/>
+ <div class="container">   
+<apex:outputPanel rendered="{!IF(ScorePer>=40, true ,false)}">
+<div class="alert alert-success">
+ congratulations you passed your exam. You have Scored {!ScorePer} % Marks.
+ </div>
+</apex:outputPanel>
+
+<apex:outputPanel rendered="{!IF(ScorePer>=40 ,false, true)}"  >
+<div class="alert alert-danger">
+Sorry You Fail in the Exam. You have Scored {!ScorePer} % Marks.
+</div>
+</apex:outputPanel>
+</div>
+</apex:page>

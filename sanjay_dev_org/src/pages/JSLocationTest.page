@@ -1,0 +1,31 @@
+<apex:page >
+ 
+<p>Click the button to display the entire URL of the current page.</p>
+
+<button onclick="myFunction()">Try it</button>
+
+<p id="demo"></p>
+
+<script>
+function myFunction() {
+    
+    var newurl= location.href + '&Id=1';   
+    history.pushState({} , '',newurl ); 
+     
+   // newurl= newurl.replace("JSLocationTest", "AngularTest"); 
+   // window.history.replaceState( {} , '',newurl ); //it only changes url
+    history.pushState({} , '',newurl );
+    //location.href = newurl;      // it reloads url
+       
+    
+    
+    //var x = location.href + '&id=1';
+    //document.getElementById("demo").innerHTML = x;
+   // location.href = 'http:www.example.com';
+   //window.location.replace("http:www.example.com");
+    //location.replace("http://www.w3schools.com")
+
+}
+</script>
+
+</apex:page>

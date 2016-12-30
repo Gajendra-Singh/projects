@@ -1,0 +1,8 @@
+<apex:page controller="TestMSWord" contentType="application/msWord#msword.doc" >
+<html xmlns:w="urn:schemas-microsoft-com:office:word">
+<apex:outputText value="{!PrintView}" escape="false"/>
+<body>
+//All your code Goes Here
+</body>
+</html>
+</apex:page>

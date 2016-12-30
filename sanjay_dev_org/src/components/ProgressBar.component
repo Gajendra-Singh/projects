@@ -1,0 +1,137 @@
+<apex:component controller="InputLookupController" id="page">
+
+
+<apex:includeScript value="{!URLFOR($Resource.progress, '/jquery-latest.js')}"/>
+<apex:includeScript value="{!URLFOR($Resource.progress, '/bootstrap/js/bootstrap.min.js')}"/>
+<apex:includeScript value="{!URLFOR($Resource.progress, '/jquery.bootstrap.wizard.js')}"/>
+<apex:includeScript value="{!URLFOR($Resource.progress, '/prettify.js')}"/>
+
+<apex:stylesheet value="{!URLFOR($Resource.progress, '/bootstrap/css/bootstrap.min.css')}"/>
+<apex:stylesheet value="{!URLFOR($Resource.progress, '/examples/custom.css')}"/>
+<apex:stylesheet value="{!URLFOR($Resource.progress, '/prettify.css')}"/>
+
+
+
+<apex:attribute name="UIElements" description="UI Elements" type="String" required="true" />
+<apex:attribute name="StageName" description="Stage Name" type="String" required="true" />
+
+  <script>
+	$(document).ready(function() {
+			   
+		var UiItems='{!UIElements}';
+		
+		console.log('UiItems-->'+UiItems);
+		var UiItemsArray =UiItems.split(",");			
+		
+		for(var i=0;i<UiItemsArray.length; i++)
+		{
+			console.log('--->>'+UiItemsArray[i]);
+			var N=i+1;
+			var idStr = "tab"+N;
+			
+			$("#ulId").append( '<li id="tab'+N+'"> <a href="#tab'+ N +'" data-toggle="tab">' + UiItemsArray[i] + '</li>' );
+			
+			if(UiItemsArray[i]=='{!StageName}')
+			{
+				console.log('---->>>>'+N);
+				document.getElementById(idStr).className = "active";
+				
+				
+			}
+			
+		}
+		
+		console.log('---StageName--->'+'{!StageName}');
+		
+		
+		
+	
+	  	$('#rootwizard').bootstrapWizard({'tabClass': 'bwizard-steps'});
+		window.prettyPrint && prettyPrint()		
+	});
+ </script>
+
+ 
+ 
+ <style>
+ 
+ .bwizard-steps li {   
+    font: menu !important;
+    }
+ 
+ .bwizard-steps .active {
+   
+    background: rgb(0, 112, 210) !important;
+}
+.bwizard-steps .active:after {
+    border-left-color: rgb(0, 112, 210) !important;
+}
+
+ /* CSS To Change li */
+.bwizard-steps li {   
+    margin-right: -15px !important;
+    background: rgb(75, 202, 129) !important;
+}
+ 
+ /* CSS To Change li */
+.bwizard-steps li:after {
+   
+    border-left: 20px solid rgb(75, 202, 129) !important;    
+}
+
+.bwizard-steps a {
+    color: #FFF;
+}
+
+.bwizard-steps li:last-child {
+   
+   border-radius: 17px !important;
+}
+
+ </style>
+	
+ 
+
+	<section id="wizard">
+			  <div class="page-header">
+<!-- 	          <center>  <h3>Opportunity Detail Page</h3> </center> -->
+	          </div>
+
+				<div id="rootwizard">
+					<ul id="ulId">
+					  	
+					</ul>
+					<div class="tab-content">
+					    <div class="tab-pane" id="tab1">
+					     	1
+					    </div>
+					    <div class="tab-pane" id="tab2">     
+					      	2
+					    </div>
+						<div class="tab-pane" id="tab3">
+							3
+					    </div>
+						<div class="tab-pane" id="tab4">
+							4
+					    </div>
+						<div class="tab-pane" id="tab5">
+							5
+					    </div>
+						<div class="tab-pane" id="tab6">
+							6
+					    </div>
+						<div class="tab-pane" id="tab7">
+							7
+					    </div>
+						<ul class="pager wizard">
+							<li class="previous first" style="display:none;"><a href="#">First</a></li>
+							<li class="previous"><a href="#">Previous</a></li>
+							<li class="next last" style="display:none;"><a href="#">Last</a></li>
+						  	<li class="next"><a href="#">Next</a></li>
+						</ul>
+					</div>
+				</div>
+   </section>  
+
+  
+</apex:component>

@@ -1,0 +1,78 @@
+<apex:page sidebar="false" Controller="SearchController" >
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" />
+
+<Script>
+function onChangeDate(temp)
+{
+	alert(temp.id);
+	var id_var= temp.id;
+	var currdate= new Date();
+  	currdate= temp.value;
+  	var j=0;
+  	  		
+	for(i=0; i<53; i++)
+	{
+		var id1=document.getElementsByClassName('aa')[i].id;
+		document.getElementsByClassName('aa')[i].value='';	
+		if(id_var==id1)
+		{
+			j=i;
+		 	break;		 			
+		}
+	}
+	
+	for(i=j; i<53; i++) 
+	{
+		
+		//currdate.setDate(currdate.getDate() + 7); 
+		document.getElementsByClassName('aa')[i].value=currdate;
+	}
+	
+	
+	
+};
+
+</Script>
+
+
+<apex:form >
+  
+      <div class="row">
+           <div class="col-sm-4" align="right"> 
+                      <apex:outputlabel > Search Property</apex:outputlabel>
+           
+                    </div>       
+           <div class="col-sm-4">           
+                       <apex:inputtext id="searchTextBox" value="{!searchText}"/>  
+                      </div>  
+             <div class="col-sm-1">        
+                       <apex:commandButton value="Search" action="{!search}" reRender="s1"/>     
+                  </div>
+      </div>
+
+		<apex:actionFunction name="test1" action="{!itemDate53}" reRender="aa1"> </apex:actionFunction>
+
+       <apex:pageblock > 
+	       	<apex:pageblockSection id="s1" >
+	        <apex:selectRadio value="{!RadioValue}" layout="PageDirection"  onchange="test1();">        
+	            <apex:selectOptions value="{!mapvalue_lst}" /> 
+	        </apex:selectRadio>
+	        </apex:pageblockSection> 
+     
+      
+      
+     
+     
+      <apex:pageblocksection id="aa1" > 
+      <apex:repeat value="{!list53}" var="q" >
+       <apex:inputField value="{!q.weekDate__c}" styleclass="aa" onchange="onChangeDate(this);"/>       
+      </apex:repeat>        
+      </apex:pageblocksection>      
+      </apex:pageblock>
+     
+     
+     
+ 
+</apex:form>  
+</apex:page>

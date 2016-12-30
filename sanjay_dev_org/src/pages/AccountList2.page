@@ -1,0 +1,24 @@
+<apex:page controller="ListAccountController">
+
+    <apex:form >
+        <apex:pageBlock >
+            <apex:pageBlockButtons >
+                <apex:commandButton value="Click Me" action="{!checkedAccount}"/>
+            </apex:pageBlockButtons>
+            <apex:dataTable value="{!listWrapper}" var="wrObj">
+            
+                <apex:column >
+                    <apex:facet name="header">
+                        <input type="checkbox"/>
+                    </apex:facet>
+                    <apex:inputCheckbox value="{!wrObj.isCheck}"/>
+                </apex:column>
+                
+                <apex:column headerValue="Name" value="{!wrObj.acc.Name}"/>
+                <apex:column headerValue="Owner Name" value="{!wrObj.acc.OwnerId}"/>
+            </apex:dataTable>
+            
+        </apex:pageBlock>
+    
+    </apex:form>
+</apex:page>

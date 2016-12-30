@@ -1,0 +1,18 @@
+<apex:page standardController="Account" recordSetVar="accounts" sidebar="false">
+    <apex:repeat var="a">
+    
+    <li>
+        <apex:outputLink >
+        
+        
+        </apex:outputLink>
+        
+        
+        
+        </li>
+    
+    </apex:repeat>
+    
+    
+    
+</apex:page>

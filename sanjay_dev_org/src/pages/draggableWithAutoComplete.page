@@ -1,0 +1,449 @@
+<apex:page docType="html-5.0" controller="draggableObjectList" standardStylesheets="false" sidebar="false" showHeader="false">   
+
+	
+   <script type="text/javascript" language="javascript" src="{!URLFOR($Resource.UserList, '/jquery-1.10.2.js')}" ></script>  
+   <script type="text/javascript" language="javascript" src="{!URLFOR($Resource.UserList1, '/jquery-ui-1.11.4.custom/jquery-ui.js')}" ></script>
+   <script type="text/javascript" language="javascript" src="{!URLFOR($Resource.UserList, '/jquery-1.4.js')}" ></script>
+   <script type="text/javascript" language="javascript" src="{!URLFOR($Resource.UserList, '/jquery.tablesorter.min.js')}" ></script>
+   <script type="text/javascript" language="javascript">
+    if(jQuery) 
+    {
+        jQuery.noConflict();
+    }
+	</script>
+	
+	
+	
+     
+<!-- BootStrap CDN -->		
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"/>
+  
+<!-- JQueryUI CDN -->
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css"/>
+<!--   <script src="//code.jquery.com/jquery-1.10.2.js"/>  jquery-1.10.2 -->
+<!--   <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"/> -->
+  
+<!-- code for Action Status -->
+    <style>			  
+	        #blockbckanim{  
+	        background-color:rgba(196, 204, 220, 0.8);  
+	        width:100%;  
+	        height:100%;
+	        position: absolute;
+	        top: 0px;
+	        left: 0px;			
+	        z-index: 1000;
+	        rgba(0, 0, 0, 0.71);
+	        cursor: wait;
+	        }
+	        
+	        #apimgld {
+			    top: 33%;
+			    left: 44%;
+			    position: fixed;
+			    border-radius: 2px;
+			    -webkit-border-radius: 2px;
+			    -moz-border-radius: 2px;
+			    background-color: #EEF3FD;
+			    padding: 1%;
+			    height: 10%;
+			    -width: 16%;
+			    font-size: large;
+			    border-bottom-left-radius: 15px;
+			    border-bottom-right-radius: 15px;
+			    border-top-right-radius: 15px;
+			    border-top-left-radius: 15px;
+			}	           
+    </style>
+    
+    <div id="blockbckanim" style="display:none">
+            <div id="apimgld"  >
+                <img src="http://www.clinicalxy.com/styles/images/progress_circle.gif"  style="height: 30px; margin-left: 30%; margin-top: -11px;" />&nbsp;&nbsp;<br/>
+                <h4 style="margin-left: 11px;">Please Wait..</h4>
+            </div>
+    </div>  
+      
+    <script>
+	      function ShowLoading() 
+	        {
+	            document.getElementById('blockbckanim').style.display="block";
+	        }
+	        function HideLoading()
+	        {
+	            document.getElementById('blockbckanim').style.display="none";
+	        }
+ 	</script>				
+  <!-- Finish action Function -->
+ 
+ <!--  Sortable CSS -->
+   <style>
+		  #sortable1, #sortable2 {
+		    border: 1px solid #eee;
+		    width: 142px;
+		    min-height: 20px;
+		    list-style-type: none;
+		    margin: 0;
+		    padding: 5px 0 0 0;
+		    float: left;
+		    margin-right: 10px;
+		  }
+		  #sortable1 li, #sortable2 li {
+		    margin: 0 5px 5px 1px;
+		    padding: 5px;
+		   
+		    width: 120px;
+		  } 
+		  
+		  #sortable1, #sortable2 {
+		  overflow-x: scroll;
+		  height: 400px;
+		  width: 150px;   
+		  
+		  }
+   </style>  
+  
+  <!-- Autocomplete CSS -->
+   <style>
+		  .ui-autocomplete {
+		    max-height: 100px;
+		    overflow-y: auto;
+		    /* prevent horizontal scrollbar */
+		    overflow-x: hidden;
+		  }
+		  /* IE 6 doesn't support max-height
+		   * we use height instead, but this forces the menu to always be this tall
+		   */
+		  * html .ui-autocomplete {
+		    height: 100px;
+		  }
+    </style>		
+    
+    <!-- Jquery for AutoComplete  -->
+     <script>      
+     		
+     
+      var JSmap= new Map();
+      
+      		  //onLoad Function 
+			  $(document).ready(function()
+			  {			 			  
+				    <apex:repeat value="{!allObjectsMap}" var="key">			  
+				   		JSmap["{!allObjectsMap[key]}"]="{!key}";		  
+				  	</apex:repeat>			  
+			  });
+			  
+			   
+			 // Autocomplete - Anonymous function
+			 $(function() 
+			 {
+				    var availableTags = [];
+				    for(key in JSmap)
+			 		{			 
+			 				availableTags.push(key);
+			 		}			
+			  
+				    $("[id$='tags']").autocomplete
+				    ({
+				    		      		
+				      		source: availableTags,
+				      		select: function(event, ui)
+					     	{
+						      	var txt=ui.item.label;				      	
+						      	document.getElementById('j_id0:j_id5:tags1').value=JSmap[txt];				      	
+						      	ObjChangeAF();
+					      	}
+				   });
+			});      
+	</script>
+	<script>
+			function enable()
+			{
+				var txtLen=$("[id$='TxtSearchID']").val().length;
+				console.log('----'+txtLen);
+				if(txtLen<2)
+				{
+					//$("[id$='BtnSearchID']")[0].disabled =true;
+					$("[id$='tableDIVID']").css("visibility", "hidden");
+					console.log('--t--'+txtLen);
+				}
+				else
+				{	
+					//$("[id$='BtnSearchID']")[0].disabled =false;
+					$("[id$='tableDIVID']").css("visibility", "visible"); 
+					console.log('--t--'+txtLen); 
+				}	
+			}
+	</script>
+	
+	<script>	
+			
+			function Searchingtext()
+			{			
+				
+				searchTable($("[id$='TxtSearchID']").val());
+				console.log('--onclick---'+$("[id$='TxtSearchID']").val());			
+			}
+			
+			function searchTable(inputVal)
+			{
+				var table = $("[id$='SearchTableID']");					
+				table.find('tr').each(function(index, row)
+				{
+					var allCells = $(row).find('td');
+					if(allCells.length > 0)
+					{
+						var found = false;
+						allCells.each(function(index, td)
+						{
+							var regExp = new RegExp(inputVal, 'i');
+							if(regExp.test($(td).text()))
+							{
+								found = true;
+								return false;
+							}
+						});
+						if(found == true)$(row).show();else $(row).hide();
+					}
+				});
+			}	
+	
+	</script>	
+
+	    
+<apex:form > 				
+<div class="container">   
+
+	<!-- Action Status for Please Wait -->
+	<apex:actionStatus id="w8" onStart="ShowLoading();" onstop="HideLoading();"/>
+	<apex:pageMessages />
+	
+	<!-- AF to change the object value -->  
+	<apex:actionFunction name="ObjChangeAF" action="{!ObjectFields}"  reRender="TwoBlocks" status="w8" /> 
+		
+	  
+	<!-- AF to select the field value to sortable2 -->	
+	<apex:actionFunction name="FieldChangeAF"  action="{!FieldRecords}"  reRender="GetRecordsID,OPSearchID" status="w8" > 	
+		 <apex:param name="fieldapi" value="" assignTo="{!FieldApiName}"/>		  		
+	</apex:actionFunction>
+	
+	<!-- AF for the Search Text -->
+	<apex:actionFunction name="SearchTxtAF" reRender="OPSearchID" />
+	
+	
+	<!-- AF for the Search Button -->
+<!-- 	<apex:actionFunction name="searchbuttonAF" action= -->
+		
+
+				 <br/>
+				 <br/>
+				 
+            <div class="row" style="background-color: ghostwhite;"> 
+            	 <div class="col-sm-2"> </div>
+            	 <div class="col-sm-3"> &nbsp;&nbsp; &nbsp;<Strong>Select Object</Strong></div> 
+            	 <div class="col-sm-2"> 		            
+			             <apex:input id="tags" type="text" value="{!ObjApiName}" />							
+			             <apex:inputHidden id="tags1" value="{!ObjApiName}" />
+			     </div> 
+			     <div class="col-sm-3"></div>
+			     <div class="col-sm-2"></div>  
+            </div>
+            
+	            <br/>
+	            <br/>
+            
+            
+       <apex:outputPanel id="TwoBlocks"  >
+       
+		       <apex:outputPanel id="GetFieldBlockID"  rendered="{!IF(ObjApiName==null||ObjApiName=='None',false,true)}">
+		       	
+		       	   <!-- Jquery for Sortable -->		       	   
+					  <script>	
+					  
+					  var ObjName='';
+					  var fieldAPI_RA='';
+					  				  
+					 
+					  
+					  
+					 	 $(function() {					  
+							
+									$( ".selector" ).draggable({									
+						               helper: "clone",
+						               revert: "invalid",						              
+									});
+									
+							    	$(".connectedSortable").droppable({								    
+						    		    accept: ".selector", 	    
+						    			drop: function( event, ui ) 
+						    			{				    			    
+						    			    $item=ui.draggable;
+						    				$(this).append($item);
+						    				// setTimeout function is only for time dialy
+						    				setTimeout(getFieldOnDrop,10);		    				
+						    		    }				    		
+								    })
+						});
+					  
+					  
+					  function getFieldOnDrop()
+					  {
+					  
+					            var sortableSize= $("#sortable2 input").size();
+			    				
+			    				console.log('---drop--'+sortableSize);
+			    				var fieldAPI='';
+			    				for(var i=0;i<sortableSize;i++)
+						      	{
+							      	var name=$($("#sortable2 input")[i]).val();
+							      	fieldAPI+=name+',';								       
+						      	}						   
+								      
+							   fieldAPI=fieldAPI.substring(0,fieldAPI.length-1);
+			    			   console.log('---fieldAPI---'+fieldAPI_RA);			      			      			   
+							   FieldChangeAF(fieldAPI);
+				      }
+					  
+					  
+					
+	  				 //Function to Move LeftSide List to RightSide List
+					  function shiftRightAll()
+					  {
+					  		 var sortableSize= $("#sortable1 input").size();
+					  		 console.log('---shiftRightAll--'+sortableSize);
+					  		 var leftLst= $("#sortable1 li").removeClass('selector').remove();
+					  		 console.log('---rightLst--'+leftLst.length);
+					  		 $("#sortable2 ").append(leftLst);
+					  		 getFieldOnDrop();
+					  		 
+					  }
+					  
+					  //Function to Move RightSide List	to LeftSide List				  
+					  function shiftLeftAll()
+					  {
+					  		var sortableSize= $("#sortable2 input").size();
+					  		console.log('---shiftLeftAll--'+sortableSize);	
+					  		var rightLst= $("#sortable2 li").removeClass('selector').remove();
+					  		console.log('---rightLst--'+rightLst.length);
+					  		$("#sortable1 ").append(rightLst);
+					  		getFieldOnDrop();
+					  		
+					  }
+					
+					  
+					  	
+					  </script>
+					
+		  
+		  	   <div class="row">
+		  		   <div class="col-sm-2"> </div>
+		  		    <div class="col-sm-3"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong> All Fields </strong> </div>
+		  			<div class="col-sm-2"> </div>
+		  			<div class="col-sm-3">  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong> Selected Fields </strong> </div>
+		  			<div class="col-sm-2"> </div>
+		  	 </div>		  			
+		  			
+		  	   <div class="row">
+		  	   	   <div class="col-sm-2"> </div>
+		  	   	   <div class="col-sm-3">
+				        <ul id="sortable1" class="connectedSortable" style="background-color: rgba(255, 0, 0, 0.28); border-radius: 4px;">	
+				        	
+				 				<apex:repeat id="list" value="{!fieldLableAPI}" var="fLblVar"> 
+				        		     <li class="selector ui-state-default" style="border-radius: 10px; font-size: 13px;">{!fieldLableAPI[fLblVar]}
+				        		     <input type="Hidden" id="inputhidden" value="{!fLblVar}"/>
+				        		     </li>
+				       		    </apex:repeat>
+				   		</ul>
+				   	</div> 
+				   	<div class="col-sm-2"> 
+				   		<br/>
+				   	 	<br/>
+				   	 	<br/>
+				   	 	<br/>
+				   	 	<apex:commandButton value=">>"  onclick="shiftRightAll()" status="w8" reRender="none" styleclass="btn btn-info" />
+				   	 	<br/>
+				   	 	<br/>
+				   	 	<apex:commandButton value="<<"  onclick="shiftLeftAll()" status="w8" reRender="none" styleclass="btn btn-info" />
+				   	
+				   	</div>
+				   	<div class="col-sm-3">
+				        <ul id="sortable2" class="connectedSortable" style="background-color: rgba(0, 128, 0, 0.35); border-radius: 4px;">
+				        </ul> 
+				    </div>   
+				   <div class="col-sm-2"> </div>
+			   </div>  
+		</apex:outputPanel>     
+         
+	         <br/>
+	         <br/>
+	               
+	         
+        <apex:outputPanel id="GetRecordsID" >  
+               
+        	<apex:outputPanel rendered="{!IF(RecordFlag==true,true,false)}">
+        	         	 
+        	        <div style="width:100%; overflow-x: auto; overflow-y: auto; max-height: 222px; ">
+				    				 
+				       	 <apex:pageBlock id="result" >
+            				<apex:pageBlockTable id="myTable" value="{!RecordLst}" var="res" StyleClass=" table table-hover" >
+                				<apex:repeat value="{!objectFields}" var="field">
+                    					<apex:column id="field" value="{!res[field]}" style="width: 150px;"/>		
+               					</apex:repeat>
+            				</apex:pageBlockTable>   
+        				</apex:pageBlock>
+				       		 	
+				    </div>				
+				    
+				    <br/>		    
+						<!-- Previous / Next / First /Last -->    
+						<div class="row">                 
+		            		<div class="col-sm-3"><Strong>{!PrvRecNum} - {!currRecNum} of {!recNum} Records</Strong></div>       
+		            		<div class="col-sm-1">  </div>     
+		           			<div class="col-sm-5">  
+			                      <apex:commandButton value="FIRST"  action="{!Firstbtn}" reRender="GetRecordsID" status="w8" disabled="{!prv}" styleclass="btn btn-info"/> 
+			                      &nbsp; &nbsp;
+			                      <apex:commandButton value="< PREVIOUS"  action="{!prvbtn}" reRender="GetRecordsID" status="w8" disabled="{!prv}" styleclass="btn btn-info" />
+			                      &nbsp;
+			                      <apex:commandButton value="NEXT >" action="{!nextbtn}" reRender="GetRecordsID"  status="w8" disabled="{!nxt}" styleclass="btn btn-info" />
+			                      &nbsp;&nbsp;
+			                      <apex:commandButton value="LAST"  action="{!Lastbtn}" reRender="GetRecordsID" status="w8" disabled="{!nxt}" styleclass="btn btn-info" />
+		           		 	</div>
+		          		    <div class="col-sm-3">    </div> 
+		   			 </div>   
+		   			 
+		   			 <br/><br/>
+						<div class="row">
+							    <div class="col-sm-2"> </div>
+							    <div class="col-sm-3"> <Strong>Search Record </Strong></div>								<!--  onkeypress="enable()" -->
+								<div class="col-sm-2"> <apex:input id="TxtSearchID" type="text" onkeyup="Searchingtext();" /></div>
+								<div class="col-sm-3"> <!-- <apex:commandButton id="BtnSearchID" value="Search" styleclass="btn btn-info" reRender="OPSearchID"  status="w8" disabled="true" /> --></div>
+								<div class="col-sm-2"> </div>																												<!-- OPSearchID- disabled="true" -->
+						</div>
+		   			 
+		   			     
+		  		</apex:outputPanel>		  		  				 
+        	</apex:outputPanel> 
+  		</apex:outputPanel>
+  			 
+  		
+  		<apex:outputPanel id="OPSearchID"> 	   				 
+			   <div id="tableDIVID" style="width:100%; overflow-x: auto; overflow-y: auto; max-height: 222px; ">			   
+			   
+			   			<apex:pageBlock id="SearchresultID" >
+	        				<apex:pageBlockTable id="SearchTableID" value="{!recNumRecordLst}" var="res" StyleClass=" table table-hover" >
+	            				<apex:repeat value="{!objectFields}" var="field">
+	                					<apex:column id="field" value="{!res[field]}" style="width: 150px;"/>		
+	           					</apex:repeat>
+	        				</apex:pageBlockTable>   
+	    				</apex:pageBlock>   				   
+			    
+			   </div>			   			  
+   		</apex:outputPanel>
+        
+            
+        		
+        
+        
+         
+ </div>
+</apex:form>
+</apex:page>

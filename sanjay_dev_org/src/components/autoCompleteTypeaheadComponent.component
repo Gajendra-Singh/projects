@@ -1,0 +1,122 @@
+<apex:component controller="autoCompleteTypeaheadController" id="page">	 			
+	
+<!-- JQuery Files -->				
+  <link href="https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css" rel="stylesheet"/>
+  <script src="https://code.jquery.com/jquery-1.10.2.js" />
+  <script src="https://code.jquery.com/ui/1.10.4/jquery-ui.js"/>
+   
+  		
+<apex:attribute name="objectname" description="The object name you want to look for." type="String" required="true" />
+<apex:attribute name="fieldsname" description="The field you like to search and include in the display." type="String" required="true" />  
+
+	
+ 	<apex:form id="formId">	 			   
+ 	
+ 				
+ 				 <apex:pageBlock >			
+			 				 <apex:pageBlockSection >
+			 				   <apex:outputText value="Enter Name "/>   <input id="tags" type="text" /> 	
+			 				 </apex:pageBlockSection> 	 
+ 											
+ 				<apex:pageBlockSection id="pb" > 
+ 				
+ 				<table>
+ 				<tr>
+ 				<td>Id:</td>
+ 				<td><input id="project" disabled="disabled"/></td>
+ 				</tr>
+ 				<tr>
+ 				<td>Price:</td>
+ 				<td><input id="project1" disabled="disabled"/></td>
+ 				</tr> 				
+ 				</table>
+ 			 		
+ 				</apex:pageBlockSection>
+ 				
+ 				</apex:pageBlock> 
+ 	
+	
+	</apex:form>  
+	
+	 
+	  <style>
+		  .ui-autocomplete {
+		    max-height: 100px;
+		    overflow-y: auto;
+		    /* prevent horizontal scrollbar */
+		    overflow-x: hidden;
+		  }
+		  /* IE 6 doesn't support max-height
+		   * we use height instead, but this forces the menu to always be this tall
+		   */
+		  * html .ui-autocomplete {
+		    height: 100px;
+		  }
+    </style>
+    
+     
+    
+    
+	 
+	 <script> 
+	 			
+	 			
+		     var ObjArray= [];
+		   	 		
+				     $( "#tags" ).autocomplete({				     
+				      minLength: 1,
+				      source: function( request, response ){
+					        //RemoteAction calling static method
+					        Visualforce.remoting.Manager.invokeAction(
+					        '{!$RemoteAction.autoCompleteTypeaheadController.getRecordslst}',
+					        request.term,'{!objectname}','{!fieldsname}',
+					        function(result, event){			
+					         
+					          if(event.type == 'exception') 
+					         {
+	                                  alert(event.message);
+	                         } else 
+	                         {       
+	                         	                 		                             
+	                                ObjArray.length=0;
+	                                 for(var key in result)	
+	                                 {                                 	
+	                                 	var k=key;
+	                                 	var v=result[key];
+	                                 	var keyvalue={objid: k,
+	                                 				  objValue: v};
+	                                 	
+	                                 	ObjArray.push(keyvalue);     	
+	                                 }   
+	                                 
+	                                 for(var i=0; i< result.length; i++)
+	                                 {
+	                                 	
+	                                 		console.log('------Id of object--'+result[i].Id); 			
+	                                 		//console.log('------Id of1111111111111 object--'+result[i].aaaabbbb__Price__c);
+	                                 		console.log('------Id of o0000000000bject--'+JSON.stringify(result[i])); 			
+	                                 	
+	                                }			
+	                              	
+	                              	response(result);		
+	                         }                         
+	                        		
+	                       })
+	                     },
+	               select: function( event, ui ){
+	                		console.log('opop--'+ui);
+	                	   	document.getElementById("tags").value = ui.item.Name;
+	                		document.getElementById("project").value = ui.item.Id;		
+	                		document.getElementById("project1").value = ui.item.Username;		
+                  		 	return false;
+                  		}
+                     })
+                   
+               .data( "ui-autocomplete" )._renderItem = function( ul, item ) {
+				            return $( "<li>" )
+				            .append( "<a>" + item.Name +"</a>" )
+				            .appendTo( ul );
+				         };     
+	</script>	
+		
+</apex:component>

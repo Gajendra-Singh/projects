@@ -1,0 +1,5 @@
+<apex:page >
+ 	 
+  	 <c:inputLookup objectname="Contact" fieldname="ReportsTo"/>    
+  	
+</apex:page>

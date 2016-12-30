@@ -1,0 +1,7 @@
+<apex:page controller="staticTesting" >
+    <apex:form >
+     
+    <apex:commandButton action="{!test}" value="test"/>
+    
+    </apex:form>
+</apex:page>

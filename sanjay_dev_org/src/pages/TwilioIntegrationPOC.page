@@ -1,0 +1,52 @@
+<apex:page controller="TwilioIntegrationPOC" sidebar="false">	  		
+
+     <apex:sectionHeader title="Twilio Integration"/>
+    <apex:form id="FrmId" >
+    
+        <!-- message -->   
+        <apex:pageMessages />
+    
+     <apex:pageBlock >        	  
+        		<apex:pageblockSection columns="1" title="Register Mobile Number for Twilio">
+        			<apex:pageblockSectionItem >
+	                     Enter Mobile Number with Country Code (eg+919000123456)
+	                    <apex:inputText value="{!validationMobile}"/>	                    
+                	</apex:pageblockSectionItem>                 	
+                	<apex:pageblockSectionItem >                	   
+                		   <apex:commandbutton value="Validate Mobile" action="{!validateMobile}" reRender="FrmId" style="margin-left: 557px;"/>                      
+                  	</apex:pageblockSectionItem>
+        		</apex:pageblockSection>     	
+        </apex:pageBlock>    
+    
+    
+        <!-- page block -->			
+        <apex:pageBlock mode="edit" >
+        
+            <!-- button -->
+            <apex:pageblockButtons location="bottom">
+                <apex:commandButton action="{!sendTextMessage}" value="Send Message"/>
+                
+                <apex:commandButton action="{!sendVoiceMessage}" value="Calling"/>
+            </apex:pageblockButtons>
+            
+            <!-- section -->
+            <apex:pageblockSection columns="1" title="Enter Mobile Number to make Call & Message">
+                
+                <!-- destination mobile number -->
+                <apex:pageblockSectionItem >
+                    Enter Mobile Number with Country Code (eg+919000123456)
+                    <apex:inputText value="{!mobileNumber}"/>
+                </apex:pageblockSectionItem>
+                
+                <!-- text message -->
+                <apex:pageblockSectionItem >
+                    Text Message
+                    <apex:inputTextArea value="{!textMessage}" style="width:6cm;height:2cm;"/>
+                </apex:pageblockSectionItem>
+                
+            </apex:pageblockSection>
+         
+        </apex:pageBlock>       
+        
+    </apex:form>
+</apex:page>

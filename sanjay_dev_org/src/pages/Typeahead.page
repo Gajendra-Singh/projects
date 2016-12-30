@@ -1,0 +1,54 @@
+<apex:page controller="Typeahead_autocomplete" docType="html-5.0">        
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" />
+  <script src="//code.jquery.com/jquery-1.10.2.js" />
+  <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js" /> 
+  <!-- <link rel="stylesheet" href="/resources/demos/style.css" /> -->
+  
+   <script>  
+   $(function()   
+  {	    
+  		 var availableList = new Array();
+  		 // This code transfers list into string variable
+  		 var str= '{!lst}';
+  		 //This code remove the square brackets of the string 
+  		 str= '{!lst}'.replace('[','');
+  		 str=  str.replace(']','');   
+  		 // This code is used to transfer list into array with comma sepration     
+         availableList =str.split(",");           
+    	    
+   		 $( "#tags" ).autocomplete({
+      		source: availableList
+    	});     
+  });  
+    
+   function passValue(c)
+   {   							   
+ 		selectedValueAF1(c);	
+ 	}	  
+  
+  </script> 
+  
+  <apex:messages />  
+	 <apex:form id="frm"> 
+	  
+		 <apex:actionFunction name="selectedValueAF1" action="{!selectedValueAF}" reRender="none">   
+		 		<apex:param value="" name="selectedValue" assignTo="{!objValue}"/>   
+		 </apex:actionFunction>  
+		  <div class="ui-widget">
+		  		<label >Type Ahead: </label> 
+		  		<input id="tags" type="text"  />
+		  		<apex:commandbutton value="Click me" onclick="passValue(document.getElementById('tags').value);return false;" reRender="frm" />  
+ 		  </div>
+		  
+					  	{!allfields}      
+					  	{!SelectedFields}  
+					  	
+					  	<!--  <apex:selectList multiselect="false" >
+					  	<apex:selectOption itemLabel="--None--" itemValue="None" />
+					  	<apex:selectOptions value="{!allfields}" />
+		                </apex:selectList>   -->			  	
+		  
+	 </apex:form>
+	 
+	 
+</apex:page>

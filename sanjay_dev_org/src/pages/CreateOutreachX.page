@@ -1,0 +1,18 @@
+<apex:page sidebar="false" id="body" standardStylesheets="false" standardController="Account" extensions="CreateOutreachXController" recordSetVar="rr" >		
+
+<apex:form > 
+<apex:pageBlock >
+		<apex:pageBlockSection >
+			<apex:inputField value="{!cont.Firstname}" label="First Name"/>   <br/>
+			<apex:inputField value="{!cont.Lastname}" label="Last Name"/>	  		
+		</apex:pageBlockSection>
+
+	  <apex:pageBlockButtons location="bottom">
+	     <apex:commandButton action="{!CreateContacts}" value="Save"/>
+	     <apex:commandButton action="{!cancelBtn}" value="cancel"/>
+	  </apex:pageBlockButtons>  
+  
+</apex:pageBlock>
+</apex:form>
+     
+</apex:page>

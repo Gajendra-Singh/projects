@@ -1,0 +1,18 @@
+<apex:page controller="XMLParser">
+
+	<apex:repeat value="{!parseData}" var="p" >
+	   <apex:repeat value="{!p}" var="aa">
+	   
+	   
+	   	<apex:repeat value="{!aa}" var="bb">
+	   	{!bb}
+	   	{!aa[bb]} <br/>
+	   		<apex:repeat value="{!bb}" var="zz">
+	   		
+	   	
+	   		</apex:repeat>
+	   	</apex:repeat>
+	   	
+	   </apex:repeat>
+	</apex:repeat>		
+</apex:page>

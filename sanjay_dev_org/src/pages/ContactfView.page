@@ -1,0 +1,12 @@
+<apex:page standardController="Merchandise__c" sidebar="false">
+ 
+    
+    <apex:pageBlock title="Merchandise Table">
+    <apex:pageBlockTable value="{! Merchandise__c.price__c}" var="contact">
+    	<apex:column value="{! Merchandise__c.Name}"/>
+        <apex:column value="{! Merchandise__c.Price__c}"/>
+        <apex:column value="{! Merchandise__c.Quantity__c}"/>
+    </apex:pageBlockTable>
+    </apex:pageBlock>
+    
+</apex:page>

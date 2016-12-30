@@ -1,0 +1,91 @@
+<apex:page standardController="Opportunity" recordSetVar="oppRecords" standardStylesheets="false" sidebar="false">
+
+<!-- code for Action Status -->         
+    <style>           
+            #blockbckanim{    
+            background-color:rgba(196, 204, 220, 0.8);  
+            width:100%;  
+            height:100%;
+            position: absolute;
+            top: 0px;
+            left: 0px;          
+            z-index: 1000;
+            rgba(0, 0, 0, 0.71);
+            cursor: wait;
+            }
+            
+            #apimgld {
+                top: 33%;
+                left: 44%;
+                position: fixed;
+                border-radius: 2px;  
+                -webkit-border-radius: 2px;
+                -moz-border-radius: 2px;
+                background-color: #EEF3FD;
+                padding: 1%;
+                height: 10%;
+                -width: 16%;
+                font-size: large;
+                border-bottom-left-radius: 15px;
+                border-bottom-right-radius: 15px;
+                border-top-right-radius: 15px;
+                border-top-left-radius: 15px;
+            }              
+    </style>
+    
+    <div id="blockbckanim" style="display:none">
+            <div id="apimgld"  >
+                <img src="http://www.clinicalxy.com/styles/images/progress_circle.gif"  style="height: 30px; margin-left: 30%; margin-top: -11px;" />&nbsp;&nbsp;<br/>
+                <h4 style="margin-left: 11px;">Please Wait..</h4>
+            </div>
+    </div>  
+        
+    <script>
+          function ShowLoading() 
+            {
+                document.getElementById('blockbckanim').style.display="block";
+            }
+            function HideLoading()
+            {
+                document.getElementById('blockbckanim').style.display="none";
+            }
+    </script>               
+  <!-- Finish action Function -->
+  
+<apex:form >
+
+    <!-- Action Status for Please Wait -->
+    <apex:actionStatus id="w8" onStart="ShowLoading();" onstop="HideLoading();"/>
+    <apex:pageMessages />
+    
+<apex:pageBlock >
+        
+        <apex:pageBlockTable value="{!oppRecords}" var="a" id="Idpb">
+        <apex:column headerValue="Opportunity Name">
+        <apex:outputLink value="/apex/OppDetailPage?id={!a.id}">{!a.name}</apex:outputLink>
+        </apex:column>
+        <!--  <apex:outputLink value="/apex/NewAccount?id={!acli.wrapperac.Id}">{!acli.wrapperac.Name}</apex:outputLink> -->
+        <apex:column headerValue="Accoaaunt Name">
+        <apex:outputField value="{!a.Amount}"/>
+        </apex:column>
+        
+        <apex:column headerValue="Stage Name">
+        <apex:outputField value="{!a.stageName}"/>
+        </apex:column>
+        
+        <apex:column headerValue="Close Date">
+        <apex:outputField value="{!a.closeDate}"/>
+        </apex:column>
+        
+        </apex:pageBlockTable>
+  
+<!-- pagination actions supported by standard list controller -->
+<apex:pageBlockButtons >
+<apex:commandButton value="First" action="{!first}" rerender="Idpb" status="w8"/>
+<apex:commandButton value="previous" action="{!previous}" rerender="Idpb" status="w8"/>
+<apex:commandButton value="Next" action="{!next}" rerender="Idpb" status="w8"/>
+<apex:commandButton value="Last" action="{!last}" rerender="Idpb" status="w8"/>
+</apex:pageBlockButtons>
+</apex:pageBlock>
+</apex:form>
+</apex:page>

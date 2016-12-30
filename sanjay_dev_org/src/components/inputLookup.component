@@ -1,0 +1,125 @@
+<apex:component controller="InputLookupController">   	 
+	    
+  <apex:includeScript value="{!URLFOR($Resource.CDNs, '/jquery-1.10.2.js')}"/>	
+  <apex:includeScript value="{!URLFOR($Resource.CDNs, '/jquery-ui.js')}"/>	          
+  <apex:stylesheet value="{!URLFOR($Resource.CDNs, '/bootstrap.min.css')}"/>
+  <apex:stylesheet value="{!URLFOR($Resource.CDNs, '/jquery-ui.css')}"/>   
+  
+  <apex:attribute name="objectname" description="The object name you want to look for." type="String" required="true" />
+  <apex:attribute name="fieldname" description="The field you like to search and include in the display." type="String" required="true" />   
+     
+    <style>
+		  .ui-autocomplete {  
+		    max-height: 100px;
+		    overflow-y: auto;
+		    /* prevent horizontal scrollbar */
+		    overflow-x: hidden;  
+		  }
+		  /* IE 6 doesn't support max-height
+		   * we use height instead, but this forces the menu to always be this tall
+		   */
+		  * html .ui-autocomplete {
+		    height: 100px;
+		  }
+    </style> 
+    
+    <script>
+    var selectListValue;
+    function Fun()
+    {
+      $("[id$='lookup']").val('');
+      selectListValue=$("[id$='IdSL']").val();
+    }
+    Fun();   
+    </script>
+    
+    
+	 
+	 <script> 	
+	      	
+	  $(function () {	     	
+	      	   	
+			     $( "#lookup" ).autocomplete({				     
+			       height: 400,
+			       minLength: 0, 		     
+			      source: function( request, response )   
+				      {   
+				        //RemoteAction calling static method
+				        InputLookupController.getList(request.term,'{!objectname}','{!fieldname}',function(result, event)
+				        {
+				            console.log('---selectListValue--'+selectListValue);
+				         
+					         if(event.type == 'exception') 
+					         {
+	                                  alert(event.message);
+	                         } else 
+	                         {                         	
+	                         	                   		  
+	                            response(result);		   
+	                         }                         
+                        		
+                       })
+                     },
+              
+               select: function( event, ui ) 
+               		{
+                		document.getElementById("lookup").value = ui.item.Name;                	   	                	  
+                		return false;
+                 	}
+                    }).focus(function(){     
+            
+            console.log('focussss--');
+             
+             if (this.value == "")
+                {
+                    $(this).autocomplete("search");
+                }
+        })
+                  
+              .data( "ui-autocomplete" )._renderItem = function( ul, item ) {
+			            return $( '<li class="slds-lookup__item">' )
+			            .append( '<a> <svg aria-hidden="true" class="slds-icon slds-icon-standard-account slds-icon--small"> <use xlink:href="{!URLFOR($Resource.SLDS090, '/assets/icons/standard-sprite/svg/symbols.svg#'+'{!name}')}"></use> </svg>' + item.Name +'</a>' )
+			            .appendTo( ul );
+			         }  
+			});   
+	
+			         
+	</script>	
+<apex:form id="formId">	 
+	<html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">    
+		<head>
+		  <apex:stylesheet value="{!URLFOR($Resource.SLDS090, 'assets/styles/salesforce-lightning-design-system.css')}" />
+		</head> 
+		
+		<input id="lookupss" type="text"/>
+ 		<div class="slds-lookup" data-select="multi" data-scope="multi" data-typeahead="false" style="width: 350px;">
+		  <div class="slds-form-element">
+		  	<div class="slds-grid slds-form-element__control">
+		     
+		     <div class="slds-dropdown-trigger slds-align-middle">
+		        <svg aria-hidden="true" class="slds-icon slds-icon-standard-user slds-icon--small slds-shrink-none">
+		          <use xlink:href="{!URLFOR($Resource.SLDS090, '/assets/icons/standard-sprite/svg/symbols.svg#user')}"></use>  
+		        </svg>
+		                          
+		         <apex:selectList id="IdSL" size="1" onchange="Fun()" styleClass="slds-button slds-button--icon-bare slds-button-space-left slds-shrink-none">
+          			  <apex:selectOption itemValue="Contact" itemLabel="Contact" >  </apex:selectOption>
+          			  <apex:selectOption itemValue="Lead" itemLabel="Lead" >      </apex:selectOption>          			   
+          	    </apex:selectList> 
+          	    
+          	    <svg aria-hidden="false" class="slds-button__icon">
+          	       <use xlink:href="{!URLFOR($Resource.SLDS090, '/assets/icons/utility-sprite/svg/symbols.svg#down')}"></use>
+          			 </svg>
+         			 <span class="slds-assistive-text">Filter</span>
+          	    <span class="slds-assistive-text">Filter</span>		 
+		      </div>
+		      <input id="lookup" class="slds-input--bare" type="text" aria-autocomplete="list" role="combobox" aria-expanded="true" aria-activedescendant="" placeholder="Search Contacts" />
+		    </div>		    
+  		</div>
+  	 </div>  	
+ </html>
+</apex:form>
+	  
+	 
+	
+		
+</apex:component>

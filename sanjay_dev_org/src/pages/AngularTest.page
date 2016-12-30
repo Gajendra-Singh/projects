@@ -1,0 +1,130 @@
+<apex:page standardStylesheets="false" sidebar="false"
+   showHeader="false" applyBodyTag="false" applyHtmlTag="false"
+   docType="html-5.0" controller="AngularDemoController">
+<html lang="en" >
+
+   <meta charset="utf-8"/>
+   <meta name="viewport" content="width=device-width, initial-scale=1"/>
+   <title>Angular Demo</title>
+   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css"/>
+   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.11/angular.min.js"></script>
+ 
+
+<body class="container" ng-app="demoApp" ng-controller="DemoCtrl">
+   <h1 style="color:Green">{{account.Name}}</h1>
+   <p class="lead" style="color:Gray">
+   {{account.BillingStreet}}<br/>
+   {{account.BillingCity}}, {{account.BillingState}}
+   {{account.BillingPostalCode}}
+   </p>
+    <b>Search</b>&nbsp;&nbsp;&nbsp;<input ng-model="query" /><br/><br/>
+    
+    
+   <table class="table table-bordered">
+     <tr>
+       <th>Name</th>
+       <th>Email</th>
+       <th>Id</th>
+     </tr>  
+     <tr ng-repeat="contact in cc| filter:query">          
+       <td>{{contact.Name}}</td>
+       <td>{{contact.Email}}</td>
+       <td>{{contact.Id}}</td>
+     </tr>
+   </table>
+   
+  <b> 10 Accounts  </b>
+   
+    <table class="table table-bordered">
+     <tr>
+       <th>Name</th>       
+     </tr>
+     <tr ng-repeat="acc in accountList | filter:query">          
+       <td>{{acc.Name}}</td>      
+     </tr>
+   </table>  
+   
+   
+   
+   
+   <b> 10 Opportunity  </b>
+   
+    <table class="table table-bordered">
+     <tr>
+       <th>Name</th>       
+     </tr>
+     <tr ng-repeat="opp in oppList | filter:query">          
+       <td>{{opp.Name}}</td>      
+     </tr>
+   </table> 
+   
+     <script>
+     // define the app
+     var demoApp = angular.module('demoApp', []);
+     // add the controller
+     demoApp.controller('DemoCtrl', function ($scope) {
+         $scope.account = {!account};
+         $scope.cc = {!contacts};
+         $scope.accountList = [];
+         $scope.oppList = [];
+         
+       // Add Account Records in "accountList" 
+       $scope.LoadData = function(){
+       
+       console.log('test');
+         Visualforce.remoting.Manager.invokeAction(
+                               '{!$RemoteAction.AngularDemoController.getTestAccountList}',
+                                function(result, event){
+                                    if (event.status) {
+                                    //Result contains list of account names and account id
+                                       $scope.accountList = result; 
+                                       
+                                       for(aa in result)
+                                       {
+                                       console.log(result[aa].Name);       
+                                       }                              
+                                    }else if (event.type === 'exception'){ 
+                                        alert(event.message,'error');                                        
+                                    }
+                                }, 
+                                {escape: false}
+                            );
+                       } 
+         $scope.LoadData();
+         
+         
+            
+       // Add Account Records in "OPPList" 
+       $scope.LoadOpp = function(){
+       
+       console.log('test');
+         Visualforce.remoting.Manager.invokeAction(
+                               '{!$RemoteAction.AngularDemoController.getTestOpportunityList}',
+                                function(result, event){
+                                    if (event.status) {
+                                    //Result contains list of account names and account id
+                                       $scope.oppList = result; 
+                                       
+                                       for(aa in result)
+                                       {
+                                       console.log(result[aa].Name);       
+                                       }                              
+                                    }else if (event.type === 'exception'){ 
+                                        alert(event.message,'error');                                        
+                                    }
+                                }, 
+                                {escape: false}
+                            );
+                       } 
+         $scope.LoadOpp();
+     });
+     
+     
+     
+     
+     
+   </script>
+    
+</body>
+</html>
+</apex:page>

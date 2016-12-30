@@ -1,0 +1,10 @@
+<apex:page standardController="Merchandise__c" sidebar="false">
+    <apex:pageBlock title="Merchandise Summary">
+        <apex:pageBlockSection >
+            Merchandise Name:- {! Merchandise__c.Name} <br/>
+            Price:- {! Merchandise__c.price__c}<br/>
+            Quantity:- {! Merchandise__c.Quantity__c}<br/>
+        </apex:pageBlockSection>
+    
+    </apex:pageBlock>
+</apex:page>

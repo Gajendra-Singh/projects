@@ -1,0 +1,145 @@
+<apex:page sidebar="false" controller="OnLineExamController" showheader="false">
+    
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"/> 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"/>
+    <apex:stylesheet value="{!URLFOR($Resource.bootstrap, 'css/bootstrap.min.css')}"/>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"/> 
+    
+    
+     
+  <style>
+        #blockbckanim{
+        background-color:rgba(196, 204, 220, 0.8);
+        width:100%;
+        height:100%;
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        z-index: 1000;
+        rgba(0, 0, 0, 0.71);
+        cursor: wait;
+        }
+        #apimgld{
+        top:36%;
+        left:45%;
+        position:fixed;
+        border-radius: 2px;
+        -webkit-border-radius: 2px ;
+        -moz-border-radius: 2px ;
+        background-color: #EEF3FD;
+        padding: 1%;
+        height: 4%;
+        width: 10%;
+        font-size: large;
+        border-bottom-left-radius: 15px;
+        border-bottom-right-radius: 15px;
+        border-top-right-radius: 15px;
+        border-top-left-radius: 15px;
+        margin-left: -30px;
+        height: 10%;
+        
+
+        }
+        
+    </style>
+    
+      <script type="text/javascript" language="javascript">
+        function ShowLoading() {
+            document.getElementById('blockbckanim').style.display="block";
+        }
+        function HideLoading() {
+            document.getElementById('blockbckanim').style.display="none";
+        }
+    </script>
+   
+   
+
+
+<div class="enact">      
+    <apex:form id="form">  
+    
+ 
+      
+         <apex:actionStatus id="lad" onStart="ShowLoading();" onstop="HideLoading();"   />     
+      
+        <br/>
+        <br/>
+         
+        <div class="row">
+          
+             <div class="page header" style="background-color:bisque;" align="center" > <font size="5"> On Line Examination  </font></div>
+             
+         </div>
+         
+         <div class="alert alert-warning">
+        <apex:pageMessages >  </apex:pageMessages>
+        </div>
+         
+         <br/><br/>
+         
+        <div class="container">
+    	<div class="row">
+    	<div class="col-sm-3" align="right"> <font size="3"> <Strong>Select Exam Paper </Strong></font></div>
+    	<div class="col-sm-4">
+    	
+    
+        	<apex:selectList multiselect="false" size="1" styleClass="form-control" value="{!selectedPaper}" >
+            	<apex:selectOption itemLabel="--None--" itemValue="None" />
+            	<apex:selectOptions value="{!paper_names}" />
+            </apex:selectList>   
+                    
+        </div>
+        <div class="col-sm-4"> </div>
+       	</div>
+        
+           <br/>
+           <br/>
+           
+        
+            <div class="row">
+    		<div class="col-sm-3" align="right"> <font size="3"> <Strong>Select Person To Send Email </Strong></font></div>
+    		<div class="col-sm-2">
+		        	<apex:selectList multiselect="true" size="10"  Styleclass="form-control" value="{!Left_Lst}" >
+		            <apex:selectOption itemLabel="--None--" itemValue="None" />
+		            <apex:selectOptions value="{!Left_Mp}" />
+		            </apex:selectList> 
+            <br/>
+           		
+			</div>
+			<div class="col-sm-1"> 
+			<br/>
+			<br/>
+			<apex:commandbutton styleclass="btn btn-info" id="moveRightButton"   action="{!RightShift}" value=">>"  status="lad" rerender="form"  />
+			<br/>
+			<br/>
+			<apex:commandbutton styleclass="btn btn-info"  value="<<" action="{!LeftShift}"   status="lad" rerender="form" /> 
+			</div>
+			<div class="col-sm-2">
+		        	<apex:selectList multiselect="true" size="10" value="{!Right_Lst}" Styleclass="form-control"  >
+		            <apex:selectOption itemLabel="--None--" itemValue="None" />
+		            <apex:selectOptions value="{!Right_Mp}" />
+		            </apex:selectList>
+		    </div> 
+			
+			</div>  
+			<div class="row"> 
+			<div class="col-sm-2">   </div>
+			<div class="col-sm-3">   </div>
+			<div class="col-sm-2">  
+			
+			<apex:outputPanel >
+		             <center>
+		             <apex:commandButton value="Send Email Notification" action="{!emailSent}" status="lad" Styleclass="btn btn-info"/>
+		             </center>
+            	</apex:outputPanel>
+			
+			
+			 </div>
+			
+			</div>    
+        
+      </div>  
+    </apex:form>
+ </div>
+ 
+</apex:page>

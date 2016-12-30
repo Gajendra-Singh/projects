@@ -1,0 +1,27 @@
+<apex:page controller="paginationcontroller">
+ <apex:pageBlock >
+  <apex:form id="tt">
+      <apex:commandButton value="Search" action="{!searchresult}" reRender="tt" />
+	{!accLst}   
+ 	<apex:pageBlockTable value="{!accLst}" var="ac">
+      <apex:column >
+          
+          <apex:selectRadio value="{!accLst}" >
+    <apex:selectOption itemValue="Member" itemlabel="Member"/>
+    <apex:selectOption itemValue="Blog" itemlabel="Blog"/>
+    <apex:selectOption itemValue="Photo" itemlabel="Photo"/>
+</apex:selectRadio>
+          
+          </apex:column>
+     
+          
+      
+  </apex:pageBlockTable>
+
+  <apex:commandButton value="FIRST" action="{!fstbtn}" disabled="{!prv}"/>
+  <apex:commandButton value="PRE" action="{!prvbtn}" disabled="{!prv}"/>
+  <apex:commandButton value="NXT" action="{!nextbtn}" disabled="{!nxt}" reRender="tt" />
+  <apex:commandButton value="END" action="{!endbtn}" disabled="{!nxt}"/>
+ </apex:form>
+</apex:pageBlock>
+</apex:page>

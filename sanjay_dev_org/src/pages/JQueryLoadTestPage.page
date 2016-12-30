@@ -1,0 +1,15 @@
+<apex:page >  
+        <apex:includeScript value="{!$Resource.jquery_1_11_3}" />
+        
+     <Script>
+       
+        if(typeof jQuery == 'undefined') {
+            alert('Not Loaded');
+        }
+        else
+        {
+        alert('Loaded');
+        
+        }
+    </script>
+</apex:page>

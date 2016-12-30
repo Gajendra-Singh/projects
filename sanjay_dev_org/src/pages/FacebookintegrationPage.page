@@ -1,0 +1,72 @@
+<apex:page controller="FacebookIntegrationController">
+
+<script>    
+        function uploadFile( accessToken , host )
+        {
+            var url = 'https://c.ap2.visual.force.com/apex/FacebookUpload?accToken='+accessToken+'&host='+host;  
+            var win = window.open(url, "Create Event", 'width=1000, height=300');
+        }
+</script>          
+<apex:form id="frm" >
+		<apex:outputpanel >      
+		            <apex:actionstatus id="w8">
+		                <apex:facet name="start">
+		                    <div class="waitingSearchDiv" id="el_loading" style="background-color: #DCD6D6;
+		                        height: 100%;opacity:0.65;width:100%;"> 
+		                    <div class="waitingHolder" style="top: 74.2px; width: 91px;">
+		                            <img class="waitingImage" src="/img/loading.gif" title="Please Wait..." />
+		                            <span class="waitingDescription">loading...</span>  
+		                        </div>
+		                    </div>        
+		                </apex:facet>
+		            </apex:actionstatus>    
+		</apex:outputpanel>     
+             
+		<apex:pagemessages />
+	<apex:pageblock > 
+
+		<apex:pageblocksection > 
+
+			<apex:commandbutton action="{!facebookAutentication}" value="Facebook Autentication" status="w8" />        
+
+			<apex:commandbutton action="{!AccessToken}" value="Get Token" status="w8" />
+
+			<apex:commandbutton action="{!accessDetails}" value="Facebook Details" reRender="fbdetail" status="w8" />         
+
+			<!-- Map of the user details -->
+			<apex:outputpanel rendered="{!IF(detailmap!=null,true,false)}" id="fbdetail">   
+							 
+					<apex:repeat value="{!detailmap}" var="a">
+			   			<apex:outputLabel value="{!a}"/> &nbsp; <apex:outputLabel value="{!detailmap[a]}"/> <br/>
+					</apex:repeat>
+							 
+			</apex:outputpanel>		  
+
+			<apex:commandbutton action="{!accessPhotos}" value="Access Photos" reRender="allphotos" status="w8" />    
+
+			<!-- Map of the Photos -->
+			<apex:outputpanel rendered="{!IF(PhotoList!=null,true,false)}" id="allphotos"> 
+							 
+					<apex:repeat value="{!PhotoList}" var="a">    		
+			   			<apex:image url="{!URLFOR(a)}" width="100" height="100" />   <br/> 
+					</apex:repeat>
+							   
+			</apex:outputpanel>	 
+
+			<apex:commandbutton action="{!postStatus}" value="Post Status" rerender="frm" status="w8" />  
+
+			<apex:inputText value="{!msg}" label="Enter Message" /> 
+
+ 	</apex:pageblocksection>  
+
+	<apex:pageblocksection >
+
+			<apex:commandbutton onclick="uploadFile('{!accessToken}' , 'graph.facebook.com/me/photos')" value="Upload Photo" rerender="none" status="w8"/> <br/>  
+
+			<apex:commandbutton onclick="uploadFile('{!accessToken}', 'graph-video.facebook.com/me/videos')" value="Upload Video" rerender="none" status="w8"/>  
+
+	</apex:pageblocksection>
+
+</apex:pageblock>
+</apex:form>
+</apex:page>

@@ -1,0 +1,16 @@
+<apex:page controller="FacebookUploadController" sidebar="false" showheader="false" >
+<form id="formId" action="https://{!host}" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="access_token" value="{!accesstoken}" />
+		<apex:pageBlock title="Upload Source" mode="edit">  
+       		<input type="file" name="source"  />
+       		<input type="text" name="message" placeholder="Message" />
+            <input class="btn" id="SubmitBtn" type="submit" value="Upload" />
+        </apex:pageBlock>
+    </form>
+    <script>
+    	window.onunload = function (e) 
+		{
+			window.close();
+		};
+    </script>
+</apex:page>

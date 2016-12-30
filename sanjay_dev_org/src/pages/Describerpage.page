@@ -1,0 +1,22 @@
+<apex:page Controller="Describer">
+<apex:form id="Describe">
+<apex:pageBlock id="block2" >
+<apex:pageblockbuttons location="top" >
+<apex:commandButton value="Get Describe Object Fields" action="{!showFields}"/>
+</apex:pageblockbuttons>
+<apex:pageblocksection >
+<apex:selectList value="{!selectedObject}" size="1">
+<apex:selectOptions value="{!objectNames}"/>
+</apex:selectList>
+</apex:pageblocksection>
+<apex:pageblocksection id="fieldList" rendered="{!not(isnull(selectedObject))}">
+    <apex:repeat value="{!fields}" var="fls">
+        <apex:inputText value="{!fls.key}" label="{!fls.key}"/>
+    
+    
+    </apex:repeat>
+    
+</apex:pageblocksection>
+</apex:pageBlock>
+</apex:form>
+</apex:page>
